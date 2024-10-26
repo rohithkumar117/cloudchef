@@ -8,16 +8,16 @@ const Profile = () => {
 
     const handleLogout = () => {
         dispatch({ type: 'LOGOUT' });
-        navigate('/login'); // Redirect to login page after logout
+        navigate('/login');
     };
 
     return (
         <div className="profile">
             <h2>Account Information</h2>
-            <p><strong>First Name:</strong> {user.firstName}</p>
-            <p><strong>Last Name:</strong> {user.lastName}</p>
-            <p><strong>Email:</strong> {user.email}</p>
-            <button className="logout" onClick={handleLogout}>Logout</button> {/* Apply the new CSS class */}
+            <p><strong>First Name:</strong> {user?.firstName || 'N/A'}</p>
+            <p><strong>Last Name:</strong> {user?.lastName || 'N/A'}</p>
+            <p><strong>Email:</strong> {user?.email || 'N/A'}</p>
+            <button className="logout" onClick={handleLogout}>Logout</button>
         </div>
     );
 };

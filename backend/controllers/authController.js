@@ -11,23 +11,25 @@ const loginUser = async (req, res) => {
     const { email, password } = req.body;
 
     try {
-        // Find the user by email
         const user = await User.findOne({ email });
         if (!user) {
             return res.status(400).json({ error: 'Invalid email or password' });
         }
 
-        // Compare the password
         const match = await bcrypt.compare(password, user.password);
         if (!match) {
             return res.status(400).json({ error: 'Invalid email or password' });
         }
 
-        // Create a token
         const token = createToken(user._id);
 
-        // Send the token and user details in the response
-        res.status(200).json({ email: user.email, token });
+        // Include firstName and lastName in the response
+        res.status(200).json({ 
+            email: user.email, 
+            token, 
+            firstName: user.firstName, 
+            lastName: user.lastName 
+        });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }

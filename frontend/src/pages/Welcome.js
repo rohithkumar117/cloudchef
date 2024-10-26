@@ -13,7 +13,7 @@ const Welcome = () => {
             try {
                 const response = await fetch('/api/recipes', {
                     headers: {
-                        'Authorization': `Bearer ${localStorage.getItem('token')}` // Include token if needed
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
                     }
                 });
                 const data = await response.json();
@@ -28,7 +28,7 @@ const Welcome = () => {
         };
 
         fetchRecipes();
-    }, [dispatch]);
+    }, []); // Removed dispatch from the dependency array
 
     const handleSearch = () => {
         if (searchQuery.trim()) {
@@ -37,7 +37,7 @@ const Welcome = () => {
     };
 
     const handleAddRecipe = () => {
-        navigate('/add-recipe'); // Navigate to the RecipeForm page
+        navigate('/add-recipe');
     };
 
     return (

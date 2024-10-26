@@ -20,9 +20,10 @@ export const recipesReducer = (state, action) => {
                 recipes: state.recipes.filter((w) => w._id !== action.payload._id)
             };
         case 'LOGIN':
+            console.log('LOGIN action payload:', action.payload); // Debug: Log the payload
             return {
                 ...state,
-                user: action.payload
+                user: action.payload // Ensure payload includes firstName and lastName
             };
         case 'LOGOUT':
             return {
