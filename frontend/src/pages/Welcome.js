@@ -28,7 +28,7 @@ const Welcome = () => {
         };
 
         fetchRecipes();
-    }, []); // Removed dispatch from the dependency array
+    }, [dispatch]);
 
     const handleSearch = () => {
         if (searchQuery.trim()) {
@@ -41,7 +41,7 @@ const Welcome = () => {
     };
 
     return (
-        <div className="welcome">
+        <div className="welcome-container">
             <h1>Welcome, {user ? user.firstName : 'Guest'}!</h1>
             <p>Explore and share your favorite recipes.</p>
             <div className="search-bar">
@@ -51,15 +51,16 @@ const Welcome = () => {
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                 />
-                <button onClick={handleSearch}>Search</button>
-                <button onClick={handleAddRecipe} style={{ marginLeft: '10px' }}>Add Recipe</button>
+                <div className="button-group">
+                    <button onClick={handleSearch}>Search</button>
+                    <button onClick={handleAddRecipe}>Add Recipe</button>
+                </div>
             </div>
-            <div className="recipes">
+            <div className="recipes-grid">
                 {recipes.length > 0 ? (
                     recipes.map((recipe) => (
                         <Link to={`/recipe/${recipe._id}`} key={recipe._id} className="recipe-box">
                             <h4>{recipe.title}</h4>
-                            <p>{recipe.ingredients}</p>
                         </Link>
                     ))
                 ) : (

@@ -7,7 +7,7 @@ const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState(null);
-    const [success, setSuccess] = useState(null);
+    const [showSuccessModal, setShowSuccessModal] = useState(false);
 
     const navigate = useNavigate();
 
@@ -28,37 +28,49 @@ const Login = () => {
 
         if (!response.ok) {
             setError(json.error);
-            setSuccess(null);
         }
         if (response.ok) {
-            // Assuming the response contains the token
             localStorage.setItem('token', json.token);
             dispatch({ type: 'LOGIN', payload: json });
-            setSuccess("Login successful.");
             setError(null);
-            setTimeout(() => navigate('/welcome'), 2000);
+            setShowSuccessModal(true);
         }
     };
 
+    const handleOkClick = () => {
+        setShowSuccessModal(false);
+        navigate('/welcome');
+    };
+
     return (
-        <form className="login" onSubmit={handleSubmit}>
-            <h3>Login</h3>
-            <label>Email:</label>
-            <input 
-                type="email"
-                onChange={(e) => setEmail(e.target.value)}
-                value={email}
-            />
-            <label>Password:</label>
-            <input 
-                type="password"
-                onChange={(e) => setPassword(e.target.value)}
-                value={password}
-            />
-            <button>Login</button>
-            {error && <div className="error">{error}</div>}
-            {success && <div className="success">{success}</div>}
-        </form>
+        <div className="login-container">
+            <form className="login-form" onSubmit={handleSubmit}>
+                <h3>Login</h3>
+                <label>Email:</label>
+                <input 
+                    type="email"
+                    onChange={(e) => setEmail(e.target.value)}
+                    value={email}
+                />
+                <label>Password:</label>
+                <input 
+                    type="password"
+                    onChange={(e) => setPassword(e.target.value)}
+                    value={password}
+                />
+                <button>Login</button>
+                {error && <div className="error">{error}</div>}
+            </form>
+
+            {showSuccessModal && (
+                <div className="modal">
+                    <div className="modal-content">
+                        <h4>Login Successful</h4>
+                        <button onClick={handleOkClick}>OK</button>
+                    </div>
+                </div>
+            )}
+        </div>
     );
 };
 

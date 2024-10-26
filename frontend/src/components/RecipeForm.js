@@ -1,81 +1,92 @@
-import { useState } from "react"
+import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useRecipesContext } from "../hooks/useRecipesContext"
 
 const RecipeForm = ()=>{
-    const{ dispatch, user } = useRecipesContext()
-
+    const{ dispatch } = useRecipesContext()
     const [title, setTitle]=useState('')
     const [ingredients, setIngredients]=useState('')
     const [process, setProcess]=useState('')
     const [error, setError]=useState(null)
-    const [emptyFields, setEmptyFields]=useState([]) // Initialize as an empty array
-    const [success, setSuccess]=useState(null) // State for success message
+    const [showSuccessModal, setShowSuccessModal] = useState(false); // State for success modal
+    const navigate = useNavigate()
 
     const handleSubmit = async(e)=>{
         e.preventDefault()
 
         const recipe = {title,ingredients,process}
 
-        //fetching from backend
-        const response = await fetch('/api/recipes',{
-            method: 'POST',
-            headers:{
-                'Content-Type':'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('token')}` // Ensure token is retrieved correctly
-            },
-            body: JSON.stringify(recipe)
-        })
+        try {
+            const response = await fetch('/api/recipes',{
+                method: 'POST',
+                body: JSON.stringify(recipe),
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}` // Include the token
+                }
+            })
 
-        const json=await response.json()
+            const json=await response.json()
 
-        if(!response.ok){
-            setError(json.error)
-            setEmptyFields(json.emptyFields || []) // Ensure it's always an array
-            setSuccess(null); // Clear success message on error
-        }
-        if(response.ok){
-            setTitle('')
-            setIngredients('')
-            setProcess('')
-            setError(null)
-            setEmptyFields([])
-            setSuccess('Recipe added successfully!'); // Set success message
-            console.log('New Recipe Added',json)
-            dispatch({type: 'CREATE_RECIPE',payload:json})
+            if(!response.ok){
+                console.error('Error response:', json);
+                setError(json.error)
+            } else {
+                console.log('Success response:', json);
+                setTitle('')
+                setIngredients('')
+                setProcess('')
+                setError(null)
+                dispatch({ type: 'CREATE_RECIPE', payload: json })
+                setShowSuccessModal(true); // Show success modal
+            }
+        } catch (err) {
+            console.error('Fetch error:', err);
+            setError('An error occurred while connecting to the server.')
         }
     }
 
+    const handleOkClick = () => {
+        setShowSuccessModal(false);
+        navigate('/welcome'); // Redirect to welcome page after acknowledging success
+    };
+
     return(
-        <form className="create" onSubmit={handleSubmit}>
-            <h3>Add A New Recipe</h3>
-            <label>Recipe Title:</label>
-            <input 
-                type="text"
-                onChange={(e)=> setTitle(e.target.value)}
-                value={title}
-                className={emptyFields.includes('title')?'error':''}
-            />
+        <div className="recipe-form-container">
+            <form className="recipe-form" onSubmit={handleSubmit}>
+                <h2>Add a New Recipe</h2>
+                <label>Title:</label>
+                <input
+                    type="text"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    required
+                />
+                <label>Ingredients:</label>
+                <textarea
+                    value={ingredients}
+                    onChange={(e) => setIngredients(e.target.value)}
+                    required
+                />
+                <label>Process:</label>
+                <textarea
+                    value={process}
+                    onChange={(e) => setProcess(e.target.value)}
+                    required
+                />
+                <button type="submit">Add Recipe</button>
+                {error && <div className="error">{error}</div>}
+            </form>
 
-            <label>Ingredients:</label>
-            <input 
-                type="text"
-                onChange={(e)=> setIngredients(e.target.value)}
-                value={ingredients}
-                className={emptyFields.includes('ingredients')?'error':''}
-            />
-
-            <label>Process:</label>
-            <input 
-                type="text"
-                onChange={(e)=> setProcess(e.target.value)}
-                value={process}
-                className={emptyFields.includes('process')?'error':''}
-            />
-            
-            <button>Add Recipe</button>
-            {error && <div className="error">{error }</div>}
-            {success && <div className="success">{success}</div>} {/* Display success message */}
-        </form>
+            {showSuccessModal && (
+                <div className="modal">
+                    <div className="modal-content">
+                        <h4>Recipe Created Successfully</h4>
+                        <button onClick={handleOkClick}>OK</button>
+                    </div>
+                </div>
+            )}
+        </div>
     )
 }
 
