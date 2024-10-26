@@ -15,9 +15,9 @@ const Profile = () => {
         <div className="profile">
             <h2>Account Information</h2>
             <p><strong>First Name:</strong> {user.firstName}</p>
-            <p><strong>Last Name:</strong> {user.lastName}</p> {/* Ensure this line is correct */}
+            <p><strong>Last Name:</strong> {user.lastName}</p>
             <p><strong>Email:</strong> {user.email}</p>
-            <button onClick={handleLogout}>Logout</button>
+            <button className="logout" onClick={handleLogout}>Logout</button> {/* Apply the new CSS class */}
         </div>
     );
 };
