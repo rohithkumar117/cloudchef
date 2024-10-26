@@ -21,6 +21,8 @@ const Welcome = () => {
                 if (response.ok) {
                     setRecipes(data);
                     dispatch({ type: 'SET_RECIPES', payload: data });
+                } else {
+                    console.error('Failed to fetch recipes:', data.message);
                 }
             } catch (error) {
                 console.error('Error fetching recipes:', error);

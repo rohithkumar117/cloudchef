@@ -9,7 +9,7 @@ const Register = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState(null);
-    const [success, setSuccess] = useState(null); // New state for success message
+    const [showSuccessModal, setShowSuccessModal] = useState(false); // State for success modal
 
     const navigate = useNavigate();
 
@@ -30,46 +30,62 @@ const Register = () => {
 
         if (!response.ok) {
             setError(json.error);
-            setSuccess(null); // Clear success message if there's an error
-        }
-        if (response.ok) {
-            setSuccess("Registration successful. Now log in."); // Set success message
-            setError(null); // Clear error message
-            setTimeout(() => navigate('/login'), 2000); // Redirect after 2 seconds
+        } else {
+            setError(null);
+            setShowSuccessModal(true); // Show success modal
         }
     };
 
+    const handleOkClick = () => {
+        setShowSuccessModal(false);
+        navigate('/login'); // Redirect to login page after acknowledging success
+    };
+
     return (
-        <form className="register" onSubmit={handleSubmit}>
-            <h3>Register</h3>
-            <label>First Name:</label>
-            <input 
-                type="text"
-                onChange={(e) => setFirstName(e.target.value)}
-                value={firstName}
-            />
-            <label>Last Name:</label>
-            <input 
-                type="text"
-                onChange={(e) => setLastName(e.target.value)}
-                value={lastName}
-            />
-            <label>Email:</label>
-            <input 
-                type="email"
-                onChange={(e) => setEmail(e.target.value)}
-                value={email}
-            />
-            <label>Password:</label>
-            <input 
-                type="password"
-                onChange={(e) => setPassword(e.target.value)}
-                value={password}
-            />
-            <button>Register</button>
-            {error && <div className="error">{error}</div>}
-            {success && <div className="success">{success}</div>} {/* Display success message */}
-        </form>
+        <div className="register-container">
+            <form className="register-form" onSubmit={handleSubmit}>
+                <h3>Register</h3>
+                <label>First Name:</label>
+                <input 
+                    type="text"
+                    onChange={(e) => setFirstName(e.target.value)}
+                    value={firstName}
+                    required
+                />
+                <label>Last Name:</label>
+                <input 
+                    type="text"
+                    onChange={(e) => setLastName(e.target.value)}
+                    value={lastName}
+                    required
+                />
+                <label>Email:</label>
+                <input 
+                    type="email"
+                    onChange={(e) => setEmail(e.target.value)}
+                    value={email}
+                    required
+                />
+                <label>Password:</label>
+                <input 
+                    type="password"
+                    onChange={(e) => setPassword(e.target.value)}
+                    value={password}
+                    required
+                />
+                <button type="submit">Register</button>
+                {error && <div className="error">{error}</div>}
+            </form>
+
+            {showSuccessModal && (
+                <div className="modal">
+                    <div className="modal-content">
+                        <h4>Registration Successful</h4>
+                        <button onClick={handleOkClick}>OK</button>
+                    </div>
+                </div>
+            )}
+        </div>
     );
 };
 
