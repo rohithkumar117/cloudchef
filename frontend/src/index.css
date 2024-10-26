@@ -921,3 +921,24 @@ button.logout:hover {
 .recipe-details p:last-child {
     margin-bottom: 0;
 }
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .home {
+    grid-template-columns: 1fr; /* Single column layout */
+    gap: 20px; /* Reduce gap */
+  }
+
+  .workout-details {
+    margin: 10px; /* Adjust margin for smaller screens */
+  }
+
+  .recipes {
+    grid-template-columns: repeat(2, 1fr); /* Two columns on smaller screens */
+  }
+
+  .recipe-box {
+    width: 100%; /* Full width */
+    height: auto; /* Auto height */
+  }
+}
