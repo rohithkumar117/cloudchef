@@ -226,7 +226,7 @@ button.logout:hover {
 
 .recipes {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* Three columns */
+  grid-template-columns: repeat(4, 1fr); /* Four columns */
   gap: 20px; /* Space between boxes */
   max-width: 1200px; /* Optional: limit the width of the grid */
   margin: 0 auto; /* Center the grid */
@@ -238,10 +238,22 @@ button.logout:hover {
   padding: 20px;
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.05);
   text-align: center;
+  width: 200px; /* Fixed width */
+  height: 200px; /* Fixed height to make it square */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none; /* Remove underline */
+  color: inherit; /* Inherit text color */
+  transition: transform 0.3s ease; /* Add a hover effect */
+}
+
+.recipe-box:hover {
+  transform: scale(1.05); /* Slightly enlarge on hover */
 }
 
 .recipe-box h4 {
-  margin: 0 0 10px 0;
+  margin: 0;
   font-size: 1.2em;
   color: var(--primary);
 }

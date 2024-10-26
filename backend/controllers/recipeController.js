@@ -98,11 +98,26 @@ const updateRecipe = async(req,res)=>{
 
 }
 
+// Search recipes by title
+const searchRecipes = async (req, res) => {
+    const { query } = req.query; // Get the search query from the request
+
+    try {
+        const recipes = await Recipe.find({
+            title: { $regex: query, $options: 'i' } // Case-insensitive search
+        });
+
+        res.status(200).json(recipes);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+};
 
 module.exports={
     getRecipes,
     getRecipe,
     createRecipe,
     deleteRecipe,
-    updateRecipe
+    updateRecipe,
+    searchRecipes
 }

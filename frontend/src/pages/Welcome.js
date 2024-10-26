@@ -1,40 +1,40 @@
 import React, { useEffect, useState } from 'react';
 import { useRecipesContext } from '../hooks/useRecipesContext';
-import RecipeDetails from '../components/RecipeDetails';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Welcome = () => {
-    const { user, recipes, dispatch } = useRecipesContext(); // Access user and recipes context
-    const [searchQuery, setSearchQuery] = useState(''); // State for search query
-    const [filteredRecipes, setFilteredRecipes] = useState(recipes || []); // State for filtered recipes
+    const { user, dispatch } = useRecipesContext();
+    const [recipes, setRecipes] = useState([]);
+    const [searchQuery, setSearchQuery] = useState('');
+    const navigate = useNavigate();
 
     useEffect(() => {
-        if (!recipes) {
-            const fetchRecipes = async () => {
+        const fetchRecipes = async () => {
+            try {
                 const response = await fetch('/api/recipes');
-                const json = await response.json();
+                const data = await response.json();
 
                 if (response.ok) {
-                    dispatch({ type: 'SET_RECIPES', payload: json });
-                    setFilteredRecipes(json);
+                    setRecipes(data);
+                    dispatch({ type: 'SET_RECIPES', payload: data });
                 }
-            };
+            } catch (error) {
+                console.error('Error fetching recipes:', error);
+            }
+        };
 
-            fetchRecipes();
-        } else {
-            setFilteredRecipes(recipes);
-        }
-    }, [recipes, dispatch]);
+        fetchRecipes();
+    }, [dispatch]);
 
     const handleSearch = () => {
-        const filtered = recipes.filter(recipe =>
-            recipe.title.toLowerCase().includes(searchQuery.toLowerCase())
-        );
-        setFilteredRecipes(filtered);
+        if (searchQuery.trim()) {
+            navigate(`/search?query=${searchQuery}`);
+        }
     };
 
     return (
         <div className="welcome">
-            <h1>Welcome, {user ? user.firstName : 'Guest'}!</h1> {/* Check if user is defined */}
+            <h1>Welcome, {user ? user.firstName : 'Guest'}!</h1>
             <p>Explore and share your favorite recipes.</p>
             <div className="search-bar">
                 <input
@@ -46,12 +46,15 @@ const Welcome = () => {
                 <button onClick={handleSearch}>Search</button>
             </div>
             <div className="recipes">
-                {filteredRecipes && filteredRecipes.map((recipe) => (
-                    <div key={recipe._id} className="recipe-box">
-                        <h4>{recipe.title}</h4>
-                        <RecipeDetails recipe={recipe} />
-                    </div>
-                ))}
+                {recipes.length > 0 ? (
+                    recipes.map((recipe) => (
+                        <Link to={`/recipe/${recipe._id}`} key={recipe._id} className="recipe-box">
+                            <h4>{recipe.title}</h4>
+                        </Link>
+                    ))
+                ) : (
+                    <p>No recipes available.</p>
+                )}
             </div>
         </div>
     );

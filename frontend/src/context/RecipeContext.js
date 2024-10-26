@@ -1,41 +1,48 @@
 import { createContext, useReducer } from "react";
 
-export const RecipesContext=createContext()
+export const RecipesContext = createContext();
 
 export const recipesReducer = (state, action) => {
     switch (action.type) {
         case 'SET_RECIPES':
-            return{
-                recipes:action.payload
-            }
-
+            return {
+                ...state,
+                recipes: action.payload
+            };
         case 'CREATE_RECIPE':
-            return{
-                recipes:[action.payload, ...state.recipes]
-            }
+            return {
+                ...state,
+                recipes: [action.payload, ...state.recipes]
+            };
         case 'DELETE_RECIPE':
-            return{
-                recipes: state.recipes.filter((w)=>w._id !== action.payload._id)
-            }
+            return {
+                ...state,
+                recipes: state.recipes.filter((w) => w._id !== action.payload._id)
+            };
         case 'LOGIN':
             return {
                 ...state,
-                user: action.payload // Ensure payload includes lastName
+                user: action.payload
+            };
+        case 'LOGOUT':
+            return {
+                ...state,
+                user: null
             };
         default:
-            return state
-
+            return state;
     }
-}
+};
 
-export const RecipesContextProvider =({ children }) =>{
-    const[state,dispatch] = useReducer(recipesReducer,{
-        recipes:null 
-    })
+export const RecipesContextProvider = ({ children }) => {
+    const [state, dispatch] = useReducer(recipesReducer, {
+        recipes: null,
+        user: null // Ensure user is part of the initial state
+    });
 
-    return(
-        <RecipesContext.Provider value= {{...state,dispatch}}>
-            { children }
+    return (
+        <RecipesContext.Provider value={{ ...state, dispatch }}>
+            {children}
         </RecipesContext.Provider>
-    )
-}
+    );
+};

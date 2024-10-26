@@ -7,7 +7,7 @@ const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState(null);
-    const [success, setSuccess] = useState(null); // New state for success message
+    const [success, setSuccess] = useState(null);
 
     const navigate = useNavigate();
 
@@ -28,13 +28,13 @@ const Login = () => {
 
         if (!response.ok) {
             setError(json.error);
-            setSuccess(null); // Clear success message if there's an error
+            setSuccess(null);
         }
         if (response.ok) {
             dispatch({ type: 'LOGIN', payload: json });
-            setSuccess("Login successful."); // Set success message
-            setError(null); // Clear error message
-            setTimeout(() => navigate('/welcome'), 2000); // Redirect after 2 seconds
+            setSuccess("Login successful.");
+            setError(null);
+            setTimeout(() => navigate('/welcome'), 2000);
         }
     };
 
@@ -55,7 +55,7 @@ const Login = () => {
             />
             <button>Login</button>
             {error && <div className="error">{error}</div>}
-            {success && <div className="success">{success}</div>} {/* Display success message */}
+            {success && <div className="success">{success}</div>}
         </form>
     );
 };

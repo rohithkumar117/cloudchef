@@ -8,12 +8,14 @@ import Register from './pages/Register'; // Import the Register component
 import Welcome from './pages/Welcome'; // Import the Welcome component
 import LandingPage from './pages/LandingPage'; // Import the LandingPage component
 import Profile from './pages/Profile'; // Import the Profile component
+import RecipeDetails from './pages/RecipeDetails'; // Import the RecipeDetails component
+import SearchResults from './pages/SearchResults'; // Import the SearchResults component
 
 function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        <Navbar />
+        <Navbar /> {/* Ensure Navbar is included here */}
         <div className='pages'>
           <Routes>
             <Route path="/" element={<LandingPage />} /> {/* Set LandingPage as the default route */}
@@ -22,6 +24,8 @@ function App() {
             <Route path="/welcome" element={<Welcome />} />
             <Route path="/home" element={<Home />} /> {/* Add a route for Home if needed */}
             <Route path="/profile" element={<Profile />} /> {/* Add the profile route */}
+            <Route path="/recipe/:id" element={<RecipeDetails />} /> {/* Add this route */}
+            <Route path="/search" element={<SearchResults />} /> {/* Add this route */}
           </Routes>
         </div>
       </BrowserRouter>

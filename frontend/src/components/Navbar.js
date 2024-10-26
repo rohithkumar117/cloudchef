@@ -4,6 +4,8 @@ import { useRecipesContext } from '../hooks/useRecipesContext'
 const Navbar = () => {
     const { user } = useRecipesContext()
 
+    console.log('User in Navbar:', user) // Debug: Log the user object
+
     return (
         <header>
             <div className="container">
