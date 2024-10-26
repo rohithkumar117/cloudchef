@@ -8,7 +8,8 @@ const RecipeForm = ()=>{
     const [ingredients, setIngredients]=useState('')
     const [process, setProcess]=useState('')
     const [error, setError]=useState(null)
-    const[emptyFields,setEmptyFields]=useState([])
+    const [emptyFields, setEmptyFields]=useState([]) // Initialize as an empty array
+    const [success, setSuccess]=useState(null) // State for success message
 
     const handleSubmit = async(e)=>{
         e.preventDefault()
@@ -18,18 +19,19 @@ const RecipeForm = ()=>{
         //fetching from backend
         const response = await fetch('/api/recipes',{
             method: 'POST',
-            body: JSON.stringify(recipe),
             headers:{
                 'Content-Type':'application/json',
-                'Authorization': `Bearer ${user.token}` // Include user token if using JWT
-            }
+                'Authorization': `Bearer ${localStorage.getItem('token')}` // Ensure token is retrieved correctly
+            },
+            body: JSON.stringify(recipe)
         })
 
         const json=await response.json()
 
         if(!response.ok){
             setError(json.error)
-            setEmptyFields(json.emptyFields)
+            setEmptyFields(json.emptyFields || []) // Ensure it's always an array
+            setSuccess(null); // Clear success message on error
         }
         if(response.ok){
             setTitle('')
@@ -37,6 +39,7 @@ const RecipeForm = ()=>{
             setProcess('')
             setError(null)
             setEmptyFields([])
+            setSuccess('Recipe added successfully!'); // Set success message
             console.log('New Recipe Added',json)
             dispatch({type: 'CREATE_RECIPE',payload:json})
         }
@@ -71,6 +74,7 @@ const RecipeForm = ()=>{
             
             <button>Add Recipe</button>
             {error && <div className="error">{error }</div>}
+            {success && <div className="success">{success}</div>} {/* Display success message */}
         </form>
     )
 }

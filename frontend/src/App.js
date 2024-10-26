@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 
 // pages and components 
 import Home from './pages/home';
@@ -10,11 +10,12 @@ import LandingPage from './pages/LandingPage'; // Import the LandingPage compone
 import Profile from './pages/Profile'; // Import the Profile component
 import RecipeDetails from './pages/RecipeDetails'; // Import the RecipeDetails component
 import SearchResults from './pages/SearchResults'; // Import the SearchResults component
+import RecipeForm from './components/RecipeForm'; // Import RecipeForm
 
 function App() {
   return (
     <div className="App">
-      <BrowserRouter>
+      <Router>
         <Navbar /> {/* Ensure Navbar is included here */}
         <div className='pages'>
           <Routes>
@@ -26,9 +27,10 @@ function App() {
             <Route path="/profile" element={<Profile />} /> {/* Add the profile route */}
             <Route path="/recipe/:id" element={<RecipeDetails />} /> {/* Add this route */}
             <Route path="/search" element={<SearchResults />} /> {/* Add this route */}
+            <Route path="/add-recipe" element={<RecipeForm />} /> {/* Add this route */}
           </Routes>
         </div>
-      </BrowserRouter>
+      </Router>
     </div>
   );
 }

@@ -1,26 +1,36 @@
 const User = require('../models/UserModel'); // Assuming you have a User model
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
+const createToken = (id) => {
+    return jwt.sign({ _id: id }, process.env.SECRET, { expiresIn: '3d' });
+};
+
+// Example login function
 const loginUser = async (req, res) => {
     const { email, password } = req.body;
 
-    const user = await User.findOne({ email });
-    if (!user) {
-        return res.status(400).json({ error: 'Invalid email or password' });
-    }
+    try {
+        // Find the user by email
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(400).json({ error: 'Invalid email or password' });
+        }
 
-    const match = await bcrypt.compare(password, user.password);
-    if (!match) {
-        return res.status(400).json({ error: 'Invalid email or password' });
-    }
+        // Compare the password
+        const match = await bcrypt.compare(password, user.password);
+        if (!match) {
+            return res.status(400).json({ error: 'Invalid email or password' });
+        }
 
-    // Ensure the response includes the last name
-    res.status(200).json({ 
-        email: user.email, 
-        id: user._id, 
-        firstName: user.firstName, 
-        lastName: user.lastName // Include last name
-    });
+        // Create a token
+        const token = createToken(user._id);
+
+        // Send the token and user details in the response
+        res.status(200).json({ email: user.email, token });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 };
 
 // Register a new user
@@ -39,7 +49,8 @@ const registerUser = async (req, res) => {
     // Create a new user
     const user = await User.create({ firstName, lastName, email, password: hashedPassword });
 
-    res.status(201).json({ email: user.email, id: user._id, firstName: user.firstName });
+    const token = createToken(user._id);
+    res.status(201).json({ email: user.email, token });
 };
 
 module.exports = { loginUser, registerUser };

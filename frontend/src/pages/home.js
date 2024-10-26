@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import { useRecipesContext } from "../hooks/useRecipesContext"
+import { useNavigate } from "react-router-dom"
 
 //components 
 
@@ -11,6 +12,7 @@ const Home = ()=>{
     const {recipes,dispatch}=useRecipesContext()    
     const [searchQuery, setSearchQuery] = useState(''); // State for search query
     const [filteredRecipes, setFilteredRecipes] = useState([]); // State for filtered recipes
+    const navigate = useNavigate(); // Add useNavigate hook
 
     useEffect(()=>{
         const fetchRecipes = async () =>{
@@ -33,6 +35,10 @@ const Home = ()=>{
         setFilteredRecipes(filtered);
     };
 
+    const handleAddRecipe = () => {
+        navigate('/add-recipe'); // Navigate to AddRecipe page
+    };
+
     return (
         <div className="home">
             <div className="search-bar">
@@ -43,6 +49,7 @@ const Home = ()=>{
                     onChange={(e) => setSearchQuery(e.target.value)}
                 />
                 <button onClick={handleSearch}>Search</button>
+                <button onClick={handleAddRecipe} style={{ marginLeft: '10px' }}>Add Recipe</button> {/* Add button with margin */}
             </div>
             <div className="workouts">
                 {filteredRecipes && filteredRecipes.map((recipe)=>(

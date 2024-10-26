@@ -1,27 +1,11 @@
-const express = require ('express')
-const {
-    createRecipe,
-    getRecipe,
-    getRecipes,
-    deleteRecipe,
-    updateRecipe
+const express = require('express');
+const { createRecipe } = require('../controllers/recipeController');
+const requireAuth = require('../middleware/authMiddleware');
+const router = express.Router();
 
-} = require('../controllers/recipeController')
-const router = express.Router()
+router.use(requireAuth); // Apply auth middleware to all routes
 
-//to get all recipes
-router.get('/',getRecipes)
+// POST a new recipe
+router.post('/', createRecipe);
 
-//get single recipe
-router.get('/:id',getRecipe)
-
-//post a new recipe
-router.post('/',createRecipe)
-
-//delete a recipe
-router.delete('/:id',deleteRecipe)
-
-//update a workout
-router.patch('/:id',updateRecipe)
-
-module.exports = router
+module.exports = router;

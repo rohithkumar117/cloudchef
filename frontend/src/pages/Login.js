@@ -31,6 +31,8 @@ const Login = () => {
             setSuccess(null);
         }
         if (response.ok) {
+            // Assuming the response contains the token
+            localStorage.setItem('token', json.token);
             dispatch({ type: 'LOGIN', payload: json });
             setSuccess("Login successful.");
             setError(null);

@@ -10,18 +10,10 @@ const app = express()
 
 //middleware
 app.use(express.json())
-app.use((req,res,next)=>{
-    console.log(req.path,req.method)
-    next()
-})
 
 // routers
 app.use('/api/recipes',recipeRoutes)
 app.use('/api', authRoutes)
-
-app.get('/api', (req, res) => {
-    res.status(200).json({ message: 'Server is up and running!' });
-});
 
 //connect to db
 mongoose.connect(process.env.MONGO_URI)
@@ -34,5 +26,6 @@ mongoose.connect(process.env.MONGO_URI)
 .catch((error)=>{
     console.log(error)
 })
+
 
 

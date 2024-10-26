@@ -1,5 +1,4 @@
 const jwt = require('jsonwebtoken');
-const User = require('../models/UserModel');
 
 const requireAuth = async (req, res, next) => {
     const { authorization } = req.headers;
@@ -15,7 +14,7 @@ const requireAuth = async (req, res, next) => {
         req.userId = _id; // Attach userId to the request
         next();
     } catch (error) {
-        console.log(error);
+        console.log('Token verification error:', error);
         res.status(401).json({ error: 'Request is not authorized' });
     }
 };

@@ -7,12 +7,12 @@ export const recipesReducer = (state, action) => {
         case 'SET_RECIPES':
             return {
                 ...state,
-                recipes: action.payload
+                recipes: action.payload // Ensure payload is an array
             };
         case 'CREATE_RECIPE':
             return {
                 ...state,
-                recipes: [action.payload, ...state.recipes]
+                recipes: [action.payload, ...state.recipes] // Add new recipe to the array
             };
         case 'DELETE_RECIPE':
             return {
@@ -36,8 +36,8 @@ export const recipesReducer = (state, action) => {
 
 export const RecipesContextProvider = ({ children }) => {
     const [state, dispatch] = useReducer(recipesReducer, {
-        recipes: null,
-        user: null // Ensure user is part of the initial state
+        recipes: [], // Initialize as an empty array
+        user: null
     });
 
     return (

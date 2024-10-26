@@ -11,7 +11,11 @@ const Welcome = () => {
     useEffect(() => {
         const fetchRecipes = async () => {
             try {
-                const response = await fetch('/api/recipes');
+                const response = await fetch('/api/recipes', {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}` // Include token if needed
+                    }
+                });
                 const data = await response.json();
 
                 if (response.ok) {
@@ -32,6 +36,10 @@ const Welcome = () => {
         }
     };
 
+    const handleAddRecipe = () => {
+        navigate('/add-recipe'); // Navigate to the RecipeForm page
+    };
+
     return (
         <div className="welcome">
             <h1>Welcome, {user ? user.firstName : 'Guest'}!</h1>
@@ -44,12 +52,14 @@ const Welcome = () => {
                     onChange={(e) => setSearchQuery(e.target.value)}
                 />
                 <button onClick={handleSearch}>Search</button>
+                <button onClick={handleAddRecipe} style={{ marginLeft: '10px' }}>Add Recipe</button>
             </div>
             <div className="recipes">
                 {recipes.length > 0 ? (
                     recipes.map((recipe) => (
                         <Link to={`/recipe/${recipe._id}`} key={recipe._id} className="recipe-box">
                             <h4>{recipe.title}</h4>
+                            <p>{recipe.ingredients}</p>
                         </Link>
                     ))
                 ) : (
