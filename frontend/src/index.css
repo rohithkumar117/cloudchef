@@ -353,7 +353,9 @@ button.logout:hover {
     display: grid;
     grid-template-columns: repeat(4, 1fr); /* Four columns */
     gap: 20px; /* Space between boxes */
-    margin-top: 20px;
+    padding: 20px;
+    max-width: 1200px; /* Optional: limit the width of the grid */
+    margin: 0 auto; /* Center the grid */
 }
 
 .recipe-box {
@@ -623,9 +625,11 @@ button.logout:hover {
 
 .recipes-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(4, 1fr); /* Four columns */
+    gap: 20px; /* Space between boxes */
     padding: 20px;
+    max-width: 1200px; /* Optional: limit the width of the grid */
+    margin: 0 auto; /* Center the grid */
 }
 
 .recipe-box {
@@ -884,4 +888,36 @@ button.logout:hover {
     padding: 20px;
     border-radius: 10px;
     text-align: center;
+}
+
+.recipe-details {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-family: 'Poppins', sans-serif;
+}
+
+.recipe-details h2 {
+    font-size: 2em;
+    color: var(--primary);
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.recipe-details p {
+    font-size: 1.1em;
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 15px;
+}
+
+.recipe-details p strong {
+    color: #333;
+}
+
+.recipe-details p:last-child {
+    margin-bottom: 0;
 }

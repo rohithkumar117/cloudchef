@@ -1,5 +1,5 @@
 const express = require('express');
-const { createRecipe } = require('../controllers/recipeController');
+const { createRecipe, getRecipe } = require('../controllers/recipeController');
 const requireAuth = require('../middleware/authMiddleware');
 const router = express.Router();
 const Recipe = require('../models/RecipeModel'); // Assuming you have a Recipe model
@@ -19,5 +19,8 @@ router.get('/', async (req, res) => {
         res.status(500).json({ message: 'Server error' });
     }
 });
+
+// GET a single recipe
+router.get('/:id', getRecipe);
 
 module.exports = router;

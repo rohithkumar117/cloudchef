@@ -25,7 +25,7 @@ function App() {
             <Route path="/welcome" element={<Welcome />} />
             <Route path="/home" element={<Home />} /> {/* Add a route for Home if needed */}
             <Route path="/profile" element={<Profile />} /> {/* Add the profile route */}
-            <Route path="/recipe/:id" element={<RecipeDetails />} /> {/* Add this route */}
+            <Route path="/recipe/:id" element={<RecipeDetails />} /> {/* Ensure this route is present */}
             <Route path="/search" element={<SearchResults />} /> {/* Add this route */}
             <Route path="/add-recipe" element={<RecipeForm />} /> {/* Add this route */}
           </Routes>

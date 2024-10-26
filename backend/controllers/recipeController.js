@@ -14,17 +14,18 @@ const getRecipes= async(req,res)=>{
 
 //get a single recpies
 const getRecipe = async(req,res)=>{
-    const { id }=req.params
-    if(!mongoose.Types.ObjectId.isValid(id)){
-        return res.status(404).json({error:'NO SUCH RECIPE'})
+    const { id } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(404).json({ error: 'No such recipe' });
     }
 
-    const recipe = await Recipe.findById(id)
+    const recipe = await Recipe.findById(id);
 
-    if(!recipe){
-        return res.status(404).json({error:'NO SUCH RECIPE'})
+    if (!recipe) {
+        return res.status(404).json({ error: 'No such recipe' });
     }
-    res.status(200).json(recipe)
+
+    res.status(200).json(recipe);
 }
 
 //create new recipe
