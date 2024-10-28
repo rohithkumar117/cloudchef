@@ -9,7 +9,7 @@ const Register = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState(null);
-    const [showSuccessModal, setShowSuccessModal] = useState(false); // State for success modal
+    const [showSuccessModal, setShowSuccessModal] = useState(false);
 
     const navigate = useNavigate();
 
@@ -32,13 +32,13 @@ const Register = () => {
             setError(json.error);
         } else {
             setError(null);
-            setShowSuccessModal(true); // Show success modal
+            setShowSuccessModal(true);
         }
     };
 
     const handleOkClick = () => {
         setShowSuccessModal(false);
-        navigate('/login'); // Redirect to login page after acknowledging success
+        navigate('/login');
     };
 
     return (

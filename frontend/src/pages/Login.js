@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useRecipesContext } from "../hooks/useRecipesContext";
+import './Login.css'; // Import the CSS file for styling
 
 const Login = () => {
     const { dispatch } = useRecipesContext();
@@ -70,6 +71,10 @@ const Login = () => {
                     </div>
                 </div>
             )}
+
+            <div className="register-prompt">
+                <p>New here? <button onClick={() => navigate('/register')} className="register-link">Create an account</button></p>
+            </div>
         </div>
     );
 };

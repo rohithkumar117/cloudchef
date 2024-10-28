@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { useRecipesContext } from "../hooks/useRecipesContext"
 import { useNavigate } from "react-router-dom"
+import BackButton from '../components/BackButton'; // Import the BackButton component
 
 //components 
 
@@ -41,6 +42,7 @@ const Home = ()=>{
 
     return (
         <div className="home">
+            <BackButton /> {/* Add the BackButton component here */}
             <div className="search-bar">
                 <input
                     type="text"
