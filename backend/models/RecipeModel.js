@@ -17,6 +17,11 @@ const recipeSchema = new Schema({
     fullName: { // New field for storing the user's full name
         type: String,
         required: true
+    },
+    userId: { // Add userId field
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
     }
 },{ timestamps: true })
 

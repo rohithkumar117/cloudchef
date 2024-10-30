@@ -23,12 +23,13 @@ const loginUser = async (req, res) => {
 
         const token = createToken(user._id);
 
-        // Include firstName and lastName in the response
+        // Include user ID in the response
         res.status(200).json({ 
             email: user.email, 
             token, 
             firstName: user.firstName, 
-            lastName: user.lastName 
+            lastName: user.lastName,
+            userId: user._id // Add userId to the response
         });
     } catch (error) {
         res.status(500).json({ error: error.message });

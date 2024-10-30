@@ -42,6 +42,33 @@ const Welcome = () => {
         navigate('/add-recipe');
     };
 
+    const handleMyRecipes = async () => {
+        if (!user) {
+            console.error('User not logged in');
+            return;
+        }
+
+        try {
+            const response = await fetch(`/api/recipes?userId=${user.id}`, {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                console.log('Fetched user recipes:', data);
+                setRecipes(data);
+                navigate('/my-recipes');
+            } else {
+                console.error('Failed to fetch user recipes:', data.message);
+            }
+        } catch (error) {
+            console.error('Error fetching user recipes:', error);
+        }
+    };
+
     return (
         <div className="welcome-container">
             <h1>Welcome, {user ? user.firstName : 'Guest'}!</h1>
@@ -56,6 +83,7 @@ const Welcome = () => {
                 <div className="button-group">
                     <button onClick={handleSearch}>Search</button>
                     <button onClick={handleAddRecipe}>Add Recipe</button>
+                    <button onClick={handleMyRecipes}>My Recipes</button>
                 </div>
             </div>
             <div className="recipes-grid">

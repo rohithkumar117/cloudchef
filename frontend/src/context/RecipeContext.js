@@ -23,7 +23,12 @@ export const recipesReducer = (state, action) => {
             console.log('LOGIN action payload:', action.payload); // Debug: Log the payload
             return {
                 ...state,
-                user: action.payload // Ensure payload includes firstName and lastName
+                user: {
+                    email: action.payload.email,
+                    firstName: action.payload.firstName,
+                    lastName: action.payload.lastName,
+                    userId: action.payload.userId // Store userId in the state
+                }
             };
         case 'LOGOUT':
             return {

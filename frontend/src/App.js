@@ -12,6 +12,8 @@ import Profile from './pages/Profile'; // Import the Profile component
 import RecipeDetails from './pages/RecipeDetails'; // Import the RecipeDetails component
 import SearchResults from './pages/SearchResults'; // Import the SearchResults component
 import RecipeForm from './components/RecipeForm'; // Import RecipeForm
+import MyRecipes from './pages/MyRecipes'; // Import the MyRecipes component
+import UpdateRecipe from './pages/UpdateRecipe'; // Import the UpdateRecipe component
 
 function App() {
   return (
@@ -29,6 +31,8 @@ function App() {
             <Route path="/recipe/:id" element={<Layout><RecipeDetails /></Layout>} /> {/* Ensure this route is present */}
             <Route path="/search" element={<Layout><SearchResults /></Layout>} /> {/* Add this route */}
             <Route path="/add-recipe" element={<Layout><RecipeForm /></Layout>} /> {/* Add this route */}
+            <Route path="/my-recipes" element={<MyRecipes />} />
+            <Route path="/update-recipe/:id" element={<Layout><UpdateRecipe /></Layout>} /> {/* Add this route */}
           </Routes>
         </div>
       </Router>
