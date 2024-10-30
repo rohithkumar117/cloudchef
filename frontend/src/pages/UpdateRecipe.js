@@ -8,6 +8,7 @@ const UpdateRecipe = () => {
     const [ingredients, setIngredients] = useState('');
     const [process, setProcess] = useState('');
     const [error, setError] = useState(null);
+    const [showUpdateSuccess, setShowUpdateSuccess] = useState(false); // State for update success modal
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -54,13 +55,16 @@ const UpdateRecipe = () => {
                 throw new Error(errorData.error || 'Failed to update the recipe');
             }
 
-            const updatedData = await response.json();
-            console.log('Updated recipe:', updatedData); // Debug: Log the updated recipe
-            navigate(`/recipe/${id}`);
+            setShowUpdateSuccess(true); // Show update success modal
         } catch (error) {
             console.error('Error updating recipe:', error);
             setError('Failed to update the recipe.');
         }
+    };
+
+    const handleUpdateSuccess = () => {
+        setShowUpdateSuccess(false);
+        navigate(`/recipe/${id}`);
     };
 
     return (
@@ -89,6 +93,15 @@ const UpdateRecipe = () => {
                 <button type="submit">Update Recipe</button>
                 {error && <div className="error">{error}</div>}
             </form>
+
+            {showUpdateSuccess && (
+                <div className="modal">
+                    <div className="modal-content">
+                        <h4>Update Successful</h4>
+                        <button onClick={handleUpdateSuccess}>OK</button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

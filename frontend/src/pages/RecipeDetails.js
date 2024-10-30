@@ -6,6 +6,8 @@ const RecipeDetails = () => {
     const { id } = useParams();
     const [recipe, setRecipe] = useState(null);
     const [error, setError] = useState(null);
+    const [showUpdateSuccess, setShowUpdateSuccess] = useState(false); // State for update success modal
+    const [showDeleteSuccess, setShowDeleteSuccess] = useState(false); // State for delete success modal
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -43,7 +45,7 @@ const RecipeDetails = () => {
                 throw new Error('Failed to delete the recipe');
             }
 
-            navigate('/my-recipes');
+            setShowDeleteSuccess(true); // Show delete success modal
         } catch (error) {
             console.error('Error deleting recipe:', error);
         }
@@ -51,6 +53,16 @@ const RecipeDetails = () => {
 
     const handleUpdate = () => {
         navigate(`/update-recipe/${id}`);
+    };
+
+    const handleUpdateSuccess = () => {
+        setShowUpdateSuccess(false);
+        navigate(`/recipe/${id}`);
+    };
+
+    const handleDeleteSuccess = () => {
+        setShowDeleteSuccess(false);
+        navigate('/my-recipes');
     };
 
     if (error) return <div>{error}</div>;
@@ -67,6 +79,24 @@ const RecipeDetails = () => {
                 <button className="btn update-btn" onClick={handleUpdate}>Update</button>
                 <button className="btn delete-btn" onClick={handleDelete}>Delete</button>
             </div>
+
+            {showUpdateSuccess && (
+                <div className="modal">
+                    <div className="modal-content">
+                        <h4>Update Successful</h4>
+                        <button onClick={handleUpdateSuccess}>OK</button>
+                    </div>
+                </div>
+            )}
+
+            {showDeleteSuccess && (
+                <div className="modal">
+                    <div className="modal-content">
+                        <h4>Delete Successful</h4>
+                        <button onClick={handleDeleteSuccess}>OK</button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

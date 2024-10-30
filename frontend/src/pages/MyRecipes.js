@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRecipesContext } from '../hooks/useRecipesContext';
 import { useNavigate } from 'react-router-dom';
+import BackButton from '../components/BackButton';
 
 const MyRecipes = () => {
     const { user, dispatch } = useRecipesContext();
@@ -44,6 +45,7 @@ const MyRecipes = () => {
 
     return (
         <div className="my-recipes">
+            <BackButton />
             <h1>My Recipes</h1>
             <div className="recipes">
                 {recipes.length > 0 ? (

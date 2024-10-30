@@ -942,3 +942,10 @@ button.logout:hover {
     height: auto; /* Auto height */
   }
 }
+
+/* Add this to your global CSS file */
+input, textarea {
+    font-family: 'Poppins', sans-serif; /* Ensure consistent font */
+    font-size: 1em; /* Set a consistent font size */
+    color: #333; /* Set a consistent font color */
+}
