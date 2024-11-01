@@ -21,6 +21,7 @@ export const recipesReducer = (state, action) => {
             };
         case 'LOGIN':
             console.log('LOGIN action payload:', action.payload); // Debug: Log the payload
+            localStorage.setItem('token', action.payload.token); // Store token in localStorage
             return {
                 ...state,
                 user: {
@@ -31,6 +32,7 @@ export const recipesReducer = (state, action) => {
                 }
             };
         case 'LOGOUT':
+            localStorage.removeItem('token'); // Remove token from localStorage
             return {
                 ...state,
                 user: null

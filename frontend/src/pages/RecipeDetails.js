@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import './RecipeDetails.css'; // Import CSS for styling
+import { useRecipesContext } from '../hooks/useRecipesContext';
+import './RecipeDetails.css'; // Import the CSS file
 
 const RecipeDetails = () => {
     const { id } = useParams();
+    const { user, dispatch } = useRecipesContext();
     const [recipe, setRecipe] = useState(null);
-    const [error, setError] = useState(null);
-    const [showUpdateSuccess, setShowUpdateSuccess] = useState(false); // State for update success modal
-    const [showDeleteSuccess, setShowDeleteSuccess] = useState(false); // State for delete success modal
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -19,13 +18,14 @@ const RecipeDetails = () => {
                     }
                 });
                 const data = await response.json();
+
                 if (response.ok) {
                     setRecipe(data);
                 } else {
-                    setError(data.error);
+                    console.error('Failed to fetch recipe:', data.message);
                 }
-            } catch (err) {
-                setError('Failed to fetch recipe details.');
+            } catch (error) {
+                console.error('Error fetching recipe:', error);
             }
         };
 
@@ -41,60 +41,34 @@ const RecipeDetails = () => {
                 }
             });
 
-            if (!response.ok) {
-                throw new Error('Failed to delete the recipe');
+            if (response.ok) {
+                dispatch({ type: 'DELETE_RECIPE', payload: id });
+                navigate('/my-recipes');
+            } else {
+                console.error('Failed to delete recipe');
             }
-
-            setShowDeleteSuccess(true); // Show delete success modal
         } catch (error) {
             console.error('Error deleting recipe:', error);
         }
     };
 
-    const handleUpdate = () => {
-        navigate(`/update-recipe/${id}`);
-    };
-
-    const handleUpdateSuccess = () => {
-        setShowUpdateSuccess(false);
-        navigate(`/recipe/${id}`);
-    };
-
-    const handleDeleteSuccess = () => {
-        setShowDeleteSuccess(false);
-        navigate('/my-recipes');
-    };
-
-    if (error) return <div>{error}</div>;
-    if (!recipe) return <div>Loading...</div>;
+    if (!recipe) {
+        return <p>Loading...</p>;
+    }
 
     return (
         <div className="recipe-details">
             <h2>{recipe.title}</h2>
-            <p><strong>Ingredients:</strong> {recipe.ingredients}</p>
-            <p><strong>Process:</strong> {recipe.process}</p>
-            <p><strong>Created by:</strong> {recipe.fullName}</p>
-            <p><strong>Date:</strong> {new Date(recipe.createdAt).toLocaleDateString()}</p>
-            <div className="button-group">
-                <button className="btn update-btn" onClick={handleUpdate}>Update</button>
-                <button className="btn delete-btn" onClick={handleDelete}>Delete</button>
+            <div className="recipe-info">
+                <p><strong>Ingredients:</strong> {recipe.ingredients}</p>
+                <p><strong>Process:</strong> {recipe.process}</p>
+                <p><strong>Created by:</strong> {recipe.fullName}</p>
+                <p><strong>Created on:</strong> {new Date(recipe.createdAt).toLocaleDateString()}</p>
             </div>
-
-            {showUpdateSuccess && (
-                <div className="modal">
-                    <div className="modal-content">
-                        <h4>Update Successful</h4>
-                        <button onClick={handleUpdateSuccess}>OK</button>
-                    </div>
-                </div>
-            )}
-
-            {showDeleteSuccess && (
-                <div className="modal">
-                    <div className="modal-content">
-                        <h4>Delete Successful</h4>
-                        <button onClick={handleDeleteSuccess}>OK</button>
-                    </div>
+            {user && user.userId === recipe.userId && (
+                <div className="button-group">
+                    <button className="btn update-btn" onClick={() => navigate(`/update-recipe/${recipe._id}`)}>Update</button>
+                    <button className="btn delete-btn" onClick={handleDelete}>Delete</button>
                 </div>
             )}
         </div>
