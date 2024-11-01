@@ -39,7 +39,7 @@ router.get('/:id', getRecipe);
 router.delete('/:id', deleteRecipe);
 
 // UPDATE a recipe
-router.patch('/:id', updateRecipe);
+router.patch('/:id', upload.single('image'), updateRecipe);
 
 // GET recipes by userId
 router.get('/user/:userId', getRecipesByUserId);

@@ -15,8 +15,6 @@ const MyRecipes = () => {
                 return;
             }
 
-            console.log('Fetching recipes for user ID:', user.userId);
-
             try {
                 const response = await fetch(`/api/recipes/user/${user.userId}`, {
                     headers: {
@@ -29,7 +27,6 @@ const MyRecipes = () => {
                 }
 
                 const data = await response.json();
-                console.log('Fetched recipes:', data);
                 setRecipes(data);
             } catch (error) {
                 console.error('Error fetching user recipes:', error);
@@ -43,18 +40,26 @@ const MyRecipes = () => {
         navigate(`/recipe/${id}`);
     };
 
+    const handleBackClick = () => {
+        navigate('/welcome');
+    };
+
     return (
         <div className="my-recipes">
-            <BackButton />
+            <BackButton onClick={handleBackClick} />
             <h1>My Recipes</h1>
             <div className="recipes">
                 {recipes.length > 0 ? (
                     recipes.map((recipe) => (
                         <div 
                             key={recipe._id} 
-                            className="recipe-box" 
+                            className="recipe-item" 
                             onClick={() => handleRecipeClick(recipe._id)}
+                            style={{ cursor: 'pointer', textAlign: 'center', marginBottom: '20px' }}
                         >
+                            {recipe.imageUrl && (
+                                <img src={`http://localhost:4000${recipe.imageUrl}`} alt={recipe.title} style={{ width: '100%', borderRadius: '8px' }} />
+                            )}
                             <h4>{recipe.title}</h4>
                         </div>
                     ))

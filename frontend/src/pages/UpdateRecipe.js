@@ -7,6 +7,7 @@ const UpdateRecipe = () => {
     const [title, setTitle] = useState('');
     const [ingredients, setIngredients] = useState('');
     const [process, setProcess] = useState('');
+    const [image, setImage] = useState(null); // State for image
     const [error, setError] = useState(null);
     const [showUpdateSuccess, setShowUpdateSuccess] = useState(false); // State for update success modal
     const navigate = useNavigate();
@@ -38,14 +39,17 @@ const UpdateRecipe = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const updatedRecipe = { title, ingredients, process };
+        const formData = new FormData();
+        formData.append('title', title);
+        formData.append('ingredients', ingredients);
+        formData.append('process', process);
+        if (image) formData.append('image', image); // Append image file if it exists
 
         try {
             const response = await fetch(`/api/recipes/${id}`, {
                 method: 'PATCH',
-                body: JSON.stringify(updatedRecipe),
+                body: formData,
                 headers: {
-                    'Content-Type': 'application/json',
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
                 }
             });
@@ -64,7 +68,7 @@ const UpdateRecipe = () => {
 
     const handleUpdateSuccess = () => {
         setShowUpdateSuccess(false);
-        navigate(`/recipe/${id}`);
+        navigate('/my-recipes'); // Redirect to My Recipes page
     };
 
     return (
@@ -89,6 +93,12 @@ const UpdateRecipe = () => {
                     value={process}
                     onChange={(e) => setProcess(e.target.value)}
                     required
+                />
+                <label>Image:</label>
+                <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => setImage(e.target.files[0])} // Handle image file
                 />
                 <button type="submit">Update Recipe</button>
                 {error && <div className="error">{error}</div>}

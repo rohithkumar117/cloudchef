@@ -89,11 +89,22 @@ const updateRecipe = async (req, res) => {
         return res.status(404).json({ error: 'No such recipe' });
     }
 
+    const updates = {
+        title: req.body.title,
+        ingredients: req.body.ingredients,
+        process: req.body.process,
+    };
+
+    // Check if a new image file is uploaded
+    if (req.file) {
+        updates.imageUrl = `/recipeImages/${req.file.filename}`;
+    }
+
     try {
         const recipe = await Recipe.findOneAndUpdate(
             { _id: id },
-            { ...req.body },
-            { new: true } // Return the updated document
+            { $set: updates },
+            { new: true }
         );
 
         if (!recipe) {
@@ -102,7 +113,7 @@ const updateRecipe = async (req, res) => {
 
         res.status(200).json(recipe);
     } catch (error) {
-        res.status(500).json({ error: 'Server error' });
+        res.status(500).json({ error: error.message });
     }
 };
 

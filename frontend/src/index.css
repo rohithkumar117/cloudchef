@@ -949,3 +949,13 @@ input, textarea {
     font-size: 1em; /* Set a consistent font size */
     color: #333; /* Set a consistent font color */
 }
+
+/* styles.css or your component-specific CSS file */
+.recipe-item img {
+    width: 200px; /* Set a fixed width */
+    height: 200px; /* Set a fixed height */
+    object-fit: cover; /* Ensure the image covers the area while maintaining aspect ratio */
+    border-radius: 8px; /* Optional: Add border radius for rounded corners */
+    display: block; /* Ensure the image is displayed as a block element */
+    margin: 0 auto; /* Center the image horizontally */
+}

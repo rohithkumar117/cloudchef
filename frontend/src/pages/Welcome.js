@@ -58,7 +58,6 @@ const Welcome = () => {
             const data = await response.json();
 
             if (response.ok) {
-                console.log('Fetched user recipes:', data);
                 setRecipes(data);
                 navigate('/my-recipes');
             } else {
@@ -89,9 +88,17 @@ const Welcome = () => {
             <div className="recipes-grid">
                 {recipes.length > 0 ? (
                     recipes.map((recipe) => (
-                        <Link to={`/recipe/${recipe._id}`} key={recipe._id} className="recipe-box">
+                        <div 
+                            key={recipe._id} 
+                            className="recipe-item" 
+                            onClick={() => navigate(`/recipe/${recipe._id}`)}
+                            style={{ cursor: 'pointer', textAlign: 'center', marginBottom: '20px' }}
+                        >
+                            {recipe.imageUrl && (
+                                <img src={`http://localhost:4000${recipe.imageUrl}`} alt={recipe.title} style={{ width: '100%', borderRadius: '8px' }} />
+                            )}
                             <h4>{recipe.title}</h4>
-                        </Link>
+                        </div>
                     ))
                 ) : (
                     <p>No recipes available.</p>
