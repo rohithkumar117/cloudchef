@@ -1,4 +1,5 @@
 const express = require('express');
+const multer = require('multer');
 const {
     getRecipes,
     getRecipe,
@@ -13,8 +14,20 @@ const router = express.Router();
 
 router.use(requireAuth); // Apply auth middleware to all routes
 
-// POST a new recipe
-router.post('/', createRecipe);
+// Configure multer for file uploads
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'recipeImages/'); // Specify the directory to save the uploaded files
+    },
+    filename: function (req, file, cb) {
+        cb(null, Date.now() + '-' + file.originalname); // Use a unique filename
+    }
+});
+
+const upload = multer({ storage: storage });
+
+// POST a new recipe with image upload
+router.post('/', upload.single('image'), createRecipe);
 
 // GET all recipes
 router.get('/', getRecipes);

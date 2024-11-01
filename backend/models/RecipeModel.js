@@ -22,6 +22,10 @@ const recipeSchema = new Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: true
+    },
+    imageUrl: { // New field for storing the image URL
+        type: String,
+        required: false
     }
 },{ timestamps: true })
 

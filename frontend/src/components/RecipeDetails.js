@@ -16,7 +16,10 @@ const RecipeDetails = ({recipe}) =>{
         }
     }
     return(
-        <div className="workout-details">
+        <div className="recipe-details">
+            {recipe.imageUrl && (
+                <img src={`http://localhost:4000${recipe.imageUrl}`} alt={recipe.title} style={{ width: '100%', borderRadius: '8px' }} />
+            )}
             <h4>{recipe.title}</h4>
             <p><strong>ingredients :</strong>{recipe.ingredients}</p>
             <p><strong>process :</strong>{recipe.process}</p>

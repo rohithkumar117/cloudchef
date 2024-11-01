@@ -58,6 +58,7 @@ const RecipeDetails = () => {
 
     return (
         <div className="recipe-details">
+            <img src={recipe.imageUrl} alt={recipe.title} style={{ width: '100%', borderRadius: '8px' }} />
             <h2>{recipe.title}</h2>
             <div className="recipe-info">
                 <p><strong>Ingredients:</strong> {recipe.ingredients}</p>
