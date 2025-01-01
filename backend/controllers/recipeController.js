@@ -187,13 +187,16 @@ const updateRecipe = async (req, res) => {
     }
 };
 
-// Search recipes by title
+// Search recipes by title and ingredients
 const searchRecipes = async (req, res) => {
     const { query } = req.query; // Get the search query from the request
 
     try {
         const recipes = await Recipe.find({
-            title: { $regex: query, $options: 'i' } // Case-insensitive search
+            $or: [
+                { title: { $regex: query, $options: 'i' } }, // Case-insensitive search by title
+                { 'ingredients.name': { $regex: query, $options: 'i' } } // Case-insensitive search by ingredient name
+            ]
         });
 
         res.status(200).json(recipes);
