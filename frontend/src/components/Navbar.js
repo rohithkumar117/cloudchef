@@ -1,25 +1,23 @@
-import { Link } from 'react-router-dom'
-import { useRecipesContext } from '../hooks/useRecipesContext'
+import { Link } from 'react-router-dom';
+import { useRecipesContext } from '../hooks/useRecipesContext';
 
 const Navbar = () => {
-    const { user } = useRecipesContext()
-
-    console.log('User in Navbar:', user) // Debug: Log the user object
+    const { user } = useRecipesContext();
 
     return (
         <header>
             <div className="container">
-                <Link to={user ? "/welcome" : "/"}> {/* Conditional link based on user status */}
-                    <h1>Cloud Chef</h1> {/* Display only the company name */}
+                <Link to={user ? "/welcome" : "/"}>
+                    <h1>Cloud Chef</h1>
                 </Link>
-                {user && ( // Only show "My Profile" if logged in
+                {user && (
                     <div>
-                        <Link to="/profile">My Profile</Link> {/* Link to the profile page */}
+                        <Link to="/profile">My Profile</Link>
                     </div>
                 )}
             </div>
         </header>
-    )
-}
+    );
+};
 
-export default Navbar
+export default Navbar;

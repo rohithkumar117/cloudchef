@@ -5,8 +5,12 @@ import './UpdateRecipe.css'; // Import CSS for styling
 const UpdateRecipe = () => {
     const { id } = useParams();
     const [title, setTitle] = useState('');
-    const [ingredients, setIngredients] = useState('');
-    const [process, setProcess] = useState('');
+    const [description, setDescription] = useState('');
+    const [totalTime, setTotalTime] = useState({ hours: 0, minutes: 0 });
+    const [ingredients, setIngredients] = useState([{ name: '', quantity: '', alternate: [] }]);
+    const [nutrition, setNutrition] = useState({ calories: 0, fat: 0, protein: 0, carbs: 0 });
+    const [steps, setSteps] = useState([{ stepNumber: 1, text: '', ingredients: [], timer: 0 }]);
+    const [tags, setTags] = useState([]);
     const [image, setImage] = useState(null); // State for image
     const [error, setError] = useState(null);
     const [showUpdateSuccess, setShowUpdateSuccess] = useState(false); // State for update success modal
@@ -23,8 +27,12 @@ const UpdateRecipe = () => {
                 const data = await response.json();
                 if (response.ok) {
                     setTitle(data.title);
+                    setDescription(data.description);
+                    setTotalTime(data.totalTime);
                     setIngredients(data.ingredients);
-                    setProcess(data.process);
+                    setNutrition(data.nutrition);
+                    setSteps(data.steps);
+                    setTags(data.tags);
                 } else {
                     setError(data.error);
                 }
@@ -41,9 +49,17 @@ const UpdateRecipe = () => {
 
         const formData = new FormData();
         formData.append('title', title);
-        formData.append('ingredients', ingredients);
-        formData.append('process', process);
-        if (image) formData.append('image', image); // Append image file if it exists
+        formData.append('description', description);
+        formData.append('totalTime[hours]', totalTime.hours);
+        formData.append('totalTime[minutes]', totalTime.minutes);
+        formData.append('ingredients', JSON.stringify(ingredients));
+        formData.append('nutrition[calories]', nutrition.calories);
+        formData.append('nutrition[fat]', nutrition.fat);
+        formData.append('nutrition[protein]', nutrition.protein);
+        formData.append('nutrition[carbs]', nutrition.carbs);
+        formData.append('steps', JSON.stringify(steps));
+        formData.append('tags', JSON.stringify(tags));
+        if (image) formData.append('mainImage', image); // Append image file if it exists
 
         try {
             const response = await fetch(`/api/recipes/${id}`, {
@@ -62,13 +78,33 @@ const UpdateRecipe = () => {
             setShowUpdateSuccess(true); // Show update success modal
         } catch (error) {
             console.error('Error updating recipe:', error);
-            setError('Failed to update the recipe.');
+            setError(error.message || 'Failed to update the recipe.');
         }
     };
 
     const handleUpdateSuccess = () => {
         setShowUpdateSuccess(false);
         navigate('/my-recipes'); // Redirect to My Recipes page
+    };
+
+    const handleIngredientChange = (index, field, value) => {
+        const newIngredients = [...ingredients];
+        newIngredients[index][field] = value;
+        setIngredients(newIngredients);
+    };
+
+    const handleAddIngredient = () => {
+        setIngredients([...ingredients, { name: '', quantity: '', alternate: [] }]);
+    };
+
+    const handleStepChange = (index, field, value) => {
+        const newSteps = [...steps];
+        newSteps[index][field] = value;
+        setSteps(newSteps);
+    };
+
+    const handleAddStep = () => {
+        setSteps([...steps, { stepNumber: steps.length + 1, text: '', ingredients: [], timer: 0 }]);
     };
 
     return (
@@ -82,16 +118,106 @@ const UpdateRecipe = () => {
                     onChange={(e) => setTitle(e.target.value)}
                     required
                 />
-                <label>Ingredients:</label>
+                <label>Description:</label>
                 <textarea
-                    value={ingredients}
-                    onChange={(e) => setIngredients(e.target.value)}
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
                     required
                 />
-                <label>Process:</label>
-                <textarea
-                    value={process}
-                    onChange={(e) => setProcess(e.target.value)}
+                <label>Total Time:</label>
+                <input
+                    type="number"
+                    placeholder="Hours"
+                    value={totalTime.hours}
+                    onChange={(e) => setTotalTime({ ...totalTime, hours: parseInt(e.target.value, 10) })}
+                    required
+                />
+                <input
+                    type="number"
+                    placeholder="Minutes"
+                    value={totalTime.minutes}
+                    onChange={(e) => setTotalTime({ ...totalTime, minutes: parseInt(e.target.value, 10) })}
+                    required
+                />
+                <label>Ingredients:</label>
+                {ingredients.map((ingredient, index) => (
+                    <div key={index}>
+                        <input
+                            type="text"
+                            placeholder="Name"
+                            value={ingredient.name}
+                            onChange={(e) => handleIngredientChange(index, 'name', e.target.value)}
+                            required
+                        />
+                        <input
+                            type="text"
+                            placeholder="Quantity"
+                            value={ingredient.quantity}
+                            onChange={(e) => handleIngredientChange(index, 'quantity', e.target.value)}
+                            required
+                        />
+                        <input
+                            type="text"
+                            placeholder="Alternate (comma separated)"
+                            value={ingredient.alternate.join(', ')}
+                            onChange={(e) => handleIngredientChange(index, 'alternate', e.target.value.split(', '))}
+                        />
+                    </div>
+                ))}
+                <button type="button" onClick={handleAddIngredient}>Add Ingredient</button>
+                <label>Nutrition:</label>
+                <input
+                    type="number"
+                    placeholder="Calories"
+                    value={nutrition.calories}
+                    onChange={(e) => setNutrition({ ...nutrition, calories: parseInt(e.target.value, 10) })}
+                    required
+                />
+                <input
+                    type="number"
+                    placeholder="Fat"
+                    value={nutrition.fat}
+                    onChange={(e) => setNutrition({ ...nutrition, fat: parseInt(e.target.value, 10) })}
+                    required
+                />
+                <input
+                    type="number"
+                    placeholder="Protein"
+                    value={nutrition.protein}
+                    onChange={(e) => setNutrition({ ...nutrition, protein: parseInt(e.target.value, 10) })}
+                    required
+                />
+                <input
+                    type="number"
+                    placeholder="Carbs"
+                    value={nutrition.carbs}
+                    onChange={(e) => setNutrition({ ...nutrition, carbs: parseInt(e.target.value, 10) })}
+                    required
+                />
+                <label>Steps:</label>
+                {steps.map((step, index) => (
+                    <div key={index}>
+                        <textarea
+                            placeholder="Step Text"
+                            value={step.text}
+                            onChange={(e) => handleStepChange(index, 'text', e.target.value)}
+                            required
+                        />
+                        <input
+                            type="number"
+                            placeholder="Timer"
+                            value={step.timer}
+                            onChange={(e) => handleStepChange(index, 'timer', parseInt(e.target.value, 10))}
+                            required
+                        />
+                    </div>
+                ))}
+                <button type="button" onClick={handleAddStep}>Add Step</button>
+                <label>Tags:</label>
+                <input
+                    type="text"
+                    value={tags.join(', ')}
+                    onChange={(e) => setTags(e.target.value.split(',').map(tag => tag.trim()))}
                     required
                 />
                 <label>Image:</label>

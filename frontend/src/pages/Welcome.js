@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useRecipesContext } from '../hooks/useRecipesContext';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const Welcome = () => {
     const { user, dispatch } = useRecipesContext();
@@ -34,7 +34,7 @@ const Welcome = () => {
 
     const handleSearch = () => {
         if (searchQuery.trim()) {
-            navigate(`/search?query=${searchQuery}`);
+            navigate(`/search-results?query=${searchQuery}`);
         }
     };
 
@@ -42,30 +42,12 @@ const Welcome = () => {
         navigate('/add-recipe');
     };
 
-    const handleMyRecipes = async () => {
-        if (!user) {
-            console.error('User not logged in');
-            return;
-        }
+    const handleMyRecipes = () => {
+        navigate('/my-recipes');
+    };
 
-        try {
-            const response = await fetch(`/api/recipes?userId=${user.id}`, {
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
-                }
-            });
-
-            const data = await response.json();
-
-            if (response.ok) {
-                setRecipes(data);
-                navigate('/my-recipes');
-            } else {
-                console.error('Failed to fetch user recipes:', data.message);
-            }
-        } catch (error) {
-            console.error('Error fetching user recipes:', error);
-        }
+    const handleSavedRecipes = () => {
+        navigate('/saved-recipes');
     };
 
     return (
@@ -83,26 +65,23 @@ const Welcome = () => {
                     <button onClick={handleSearch}>Search</button>
                     <button onClick={handleAddRecipe}>Add Recipe</button>
                     <button onClick={handleMyRecipes}>My Recipes</button>
+                    <button onClick={handleSavedRecipes}>Saved Recipes</button>
                 </div>
             </div>
             <div className="recipes-grid">
-                {recipes.length > 0 ? (
-                    recipes.map((recipe) => (
-                        <div 
-                            key={recipe._id} 
-                            className="recipe-item" 
-                            onClick={() => navigate(`/recipe/${recipe._id}`)}
-                            style={{ cursor: 'pointer', textAlign: 'center', marginBottom: '20px' }}
-                        >
-                            {recipe.imageUrl && (
-                                <img src={`http://localhost:4000${recipe.imageUrl}`} alt={recipe.title} style={{ width: '100%', borderRadius: '8px' }} />
-                            )}
-                            <h4>{recipe.title}</h4>
-                        </div>
-                    ))
-                ) : (
-                    <p>No recipes available.</p>
-                )}
+                {recipes.map((recipe) => (
+                    <div 
+                        key={recipe._id} 
+                        className="recipe-item" 
+                        onClick={() => navigate(`/recipe/${recipe._id}`)}
+                        style={{ cursor: 'pointer', textAlign: 'center', marginBottom: '20px' }}
+                    >
+                        {recipe.mainImage && (
+                            <img src={`http://localhost:4000${recipe.mainImage}`} alt={recipe.title} style={{ width: '100%', borderRadius: '8px' }} />
+                        )}
+                        <h4>{recipe.title}</h4>
+                    </div>
+                ))}
             </div>
         </div>
     );

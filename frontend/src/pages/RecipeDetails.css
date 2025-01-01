@@ -1,28 +1,79 @@
 .recipe-details {
-    max-width: 600px;
+    max-width: 800px;
     margin: 0 auto;
     padding: 20px;
-    background: #fff;
+    background-color: #fff;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    text-align: center;
+    font-family: 'Poppins', sans-serif;
 }
 
 .recipe-details h2 {
-    margin-bottom: 20px;
     font-size: 2em;
-    color: #333;
+    color: var(--primary);
+    margin-bottom: 20px;
+    text-align: center;
 }
 
 .recipe-details p {
-    margin-bottom: 10px;
     font-size: 1.1em;
     color: #555;
+    line-height: 1.6;
+    margin-bottom: 15px;
+}
+
+.recipe-details p strong {
+    color: #333;
+}
+
+.recipe-details p:last-child {
+    margin-bottom: 0;
+}
+
+.recipe-image {
+    width: 100%;
+    max-width: 400px; /* Set a fixed max width */
+    height: auto;
+    object-fit: cover; /* Maintain aspect ratio */
+    border-radius: 8px;
+    display: block;
+    margin: 0 auto 20px; /* Center the image and add bottom margin */
+}
+
+.recipe-info {
+    margin-bottom: 20px;
+}
+
+.step-image {
+    width: 100%;
+    max-width: 400px; /* Set a fixed max width */
+    height: auto;
+    object-fit: cover; /* Maintain aspect ratio */
+    border-radius: 8px;
+    display: block;
+    margin: 10px 0; /* Add top and bottom margin */
+}
+
+.ingredients-table, .nutrition-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.ingredients-table th, .nutrition-table th, .ingredients-table td, .nutrition-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.ingredients-table th, .nutrition-table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
 }
 
 .button-group {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     gap: 15px;
     margin-top: 20px;
 }
@@ -37,21 +88,114 @@
 }
 
 .update-btn {
-    background-color: #28a745;
+    background-color: #007bff;
     color: #fff;
 }
 
 .update-btn:hover {
-    background-color: #218838;
+    background-color: #0056b3;
     transform: translateY(-2px);
 }
 
 .delete-btn {
-    background-color: #ff4d4f;
+    background-color: #dc3545;
     color: #fff;
 }
 
 .delete-btn:hover {
-    background-color: #d9363e;
+    background-color: #c82333;
+    transform: translateY(-2px);
+}
+
+.save-btn {
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.1em;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin-top: 20px; /* Add margin for spacing */
+}
+
+.save-btn:hover {
+    background-color: #218838;
+    transform: translateY(-2px);
+}
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    backdrop-filter: blur(5px);
+}
+
+.modal-content {
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    max-width: 500px;
+    width: 90%;
+    text-align: center;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.modal-content h4 {
+    margin-bottom: 25px;
+    font-size: 1.8em;
+    color: #333;
+    font-weight: bold;
+}
+
+.modal-content button {
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1.1em;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.modal-content button:hover {
+    background-color: #218838;
+    transform: translateY(-2px);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+/* Add this to your RecipeDetails.css file */
+.unsave-btn {
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.1em;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin-top: 20px; /* Add margin for spacing */
+}
+
+.unsave-btn:hover {
+    background-color: #c82333;
     transform: translateY(-2px);
 }

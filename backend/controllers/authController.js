@@ -1,4 +1,4 @@
-const User = require('../models/UserModel'); // Assuming you have a User model
+const User = require('../models/UserModel');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
@@ -36,6 +36,12 @@ const loginUser = async (req, res) => {
     }
 };
 
+// Example logout function
+const logoutUser = (req, res) => {
+    // Invalidate the token on the client side
+    res.status(200).json({ message: 'Logout successful' });
+};
+
 // Register a new user
 const registerUser = async (req, res) => {
     const { firstName, lastName, email, password } = req.body;
@@ -56,4 +62,4 @@ const registerUser = async (req, res) => {
     res.status(201).json({ email: user.email, token });
 };
 
-module.exports = { loginUser, registerUser };
+module.exports = { loginUser, registerUser, logoutUser };

@@ -7,12 +7,12 @@ export const recipesReducer = (state, action) => {
         case 'SET_RECIPES':
             return {
                 ...state,
-                recipes: action.payload // Ensure payload is an array
+                recipes: action.payload
             };
         case 'CREATE_RECIPE':
             return {
                 ...state,
-                recipes: [action.payload, ...state.recipes] // Add new recipe to the array
+                recipes: [action.payload, ...state.recipes]
             };
         case 'DELETE_RECIPE':
             return {
@@ -20,19 +20,18 @@ export const recipesReducer = (state, action) => {
                 recipes: state.recipes.filter((w) => w._id !== action.payload._id)
             };
         case 'LOGIN':
-            console.log('LOGIN action payload:', action.payload); // Debug: Log the payload
-            localStorage.setItem('token', action.payload.token); // Store token in localStorage
+            localStorage.setItem('token', action.payload.token);
             return {
                 ...state,
                 user: {
                     email: action.payload.email,
                     firstName: action.payload.firstName,
                     lastName: action.payload.lastName,
-                    userId: action.payload.userId // Store userId in the state
+                    userId: action.payload.userId
                 }
             };
         case 'LOGOUT':
-            localStorage.removeItem('token'); // Remove token from localStorage
+            localStorage.removeItem('token');
             return {
                 ...state,
                 user: null
@@ -44,7 +43,7 @@ export const recipesReducer = (state, action) => {
 
 export const RecipesContextProvider = ({ children }) => {
     const [state, dispatch] = useReducer(recipesReducer, {
-        recipes: [], // Initialize as an empty array
+        recipes: [],
         user: null
     });
 

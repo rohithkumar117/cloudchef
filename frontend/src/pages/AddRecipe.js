@@ -3,7 +3,7 @@ import { useRecipesContext } from '../hooks/useRecipesContext';
 import { useNavigate } from 'react-router-dom';
 
 const AddRecipe = () => {
-    const { dispatch, user } = useRecipesContext();
+    const { dispatch } = useRecipesContext();
     const [title, setTitle] = useState('');
     const [ingredients, setIngredients] = useState('');
     const [process, setProcess] = useState('');

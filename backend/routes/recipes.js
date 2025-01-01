@@ -27,7 +27,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 // POST a new recipe with image upload
-router.post('/', upload.single('image'), createRecipe);
+router.post('/', upload.single('mainImage'), createRecipe);
 
 // GET all recipes
 router.get('/', getRecipes);
@@ -39,9 +39,12 @@ router.get('/:id', getRecipe);
 router.delete('/:id', deleteRecipe);
 
 // UPDATE a recipe
-router.patch('/:id', upload.single('image'), updateRecipe);
+router.patch('/:id', upload.single('mainImage'), updateRecipe);
 
 // GET recipes by userId
 router.get('/user/:userId', getRecipesByUserId);
+
+// SEARCH recipes
+router.get('/search', searchRecipes);
 
 module.exports = router;

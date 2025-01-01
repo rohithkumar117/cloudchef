@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useRecipesContext } from '../hooks/useRecipesContext';
 import { useNavigate } from 'react-router-dom';
-import BackButton from '../components/BackButton';
 
 const MyRecipes = () => {
-    const { user, dispatch } = useRecipesContext();
+    const { user } = useRecipesContext();
     const [recipes, setRecipes] = useState([]);
     const navigate = useNavigate();
 
@@ -40,13 +39,8 @@ const MyRecipes = () => {
         navigate(`/recipe/${id}`);
     };
 
-    const handleBackClick = () => {
-        navigate('/welcome');
-    };
-
     return (
         <div className="my-recipes">
-            <BackButton onClick={handleBackClick} />
             <h1>My Recipes</h1>
             <div className="recipes">
                 {recipes.length > 0 ? (
@@ -57,8 +51,8 @@ const MyRecipes = () => {
                             onClick={() => handleRecipeClick(recipe._id)}
                             style={{ cursor: 'pointer', textAlign: 'center', marginBottom: '20px' }}
                         >
-                            {recipe.imageUrl && (
-                                <img src={`http://localhost:4000${recipe.imageUrl}`} alt={recipe.title} style={{ width: '100%', borderRadius: '8px' }} />
+                            {recipe.mainImage && (
+                                <img src={`http://localhost:4000${recipe.mainImage}`} alt={recipe.title} style={{ width: '100%', borderRadius: '8px' }} />
                             )}
                             <h4>{recipe.title}</h4>
                         </div>

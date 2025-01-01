@@ -5,7 +5,7 @@ import BackButton from '../components/BackButton'; // Import the BackButton comp
 
 //components 
 
-import RecipeDetails from '../components/RecipeDetails'
+import RecipeDetails from '../components/RecipeDetailsComponent'
 import RecipeForm from '../components/RecipeForm'
 
 
