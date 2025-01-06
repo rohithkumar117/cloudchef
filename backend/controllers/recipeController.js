@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const User = require('../models/UserModel');
 const multer = require('multer');
 const path = require('path');
+const fs = require('fs'); // Import the fs module
 
 // Configure multer for file uploads
 const storage = multer.diskStorage({
@@ -122,9 +123,7 @@ const deleteRecipe = async (req, res) => {
             const imagePath = path.join(__dirname, '..', recipe.mainImage);
             fs.unlink(imagePath, (err) => {
                 if (err) {
-                    console.error('Error deleting image file:', imagePath, err);
-                } else {
-                    console.log('Deleted image file:', imagePath);
+                    // Handle error silently
                 }
             });
         }
@@ -183,7 +182,8 @@ const updateRecipe = async (req, res) => {
 
         res.status(200).json(recipe);
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        console.error('Error updating recipe:', error);
+        res.status(500).json({ error: 'Server error' });
     }
 };
 

@@ -10,6 +10,7 @@ const RecipeDetails = () => {
     const [isSaved, setIsSaved] = useState(false); // State to track if the recipe is saved
     const [showSuccessModal, setShowSuccessModal] = useState(false); // State for success modal
     const [successMessage, setSuccessMessage] = useState(''); // State for success message
+    const [addedIngredients, setAddedIngredients] = useState([]); // State to track added ingredients
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -54,7 +55,88 @@ const RecipeDetails = () => {
 
         fetchRecipe();
         checkIfSaved();
+
+        // Load added ingredients from local storage
+        const storedAddedIngredients = localStorage.getItem(`addedIngredients_${id}`);
+        if (storedAddedIngredients) {
+            setAddedIngredients(JSON.parse(storedAddedIngredients));
+        }
     }, [id, user.userId]);
+
+    const handleAddToCart = async (ingredient) => {
+        try {
+            const response = await fetch('/api/cart/add', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                },
+                body: JSON.stringify({ ingredient: ingredient.name, quantity: ingredient.quantity })
+            });
+
+            if (response.ok) {
+                setSuccessMessage('Ingredient added to cart successfully');
+                setShowSuccessModal(true);
+                const updatedAddedIngredients = [...addedIngredients, ingredient.name];
+                setAddedIngredients(updatedAddedIngredients);
+                localStorage.setItem(`addedIngredients_${id}`, JSON.stringify(updatedAddedIngredients));
+            } else {
+                console.error('Failed to add ingredient to cart');
+            }
+        } catch (error) {
+            console.error('Error adding ingredient to cart:', error);
+        }
+    };
+
+    const handleRemoveFromCart = async (ingredient) => {
+        try {
+            const response = await fetch('/api/cart/delete', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                },
+                body: JSON.stringify({ ingredient: ingredient.name })
+            });
+
+            if (response.ok) {
+                setSuccessMessage('Ingredient removed from cart successfully');
+                setShowSuccessModal(true);
+                const updatedAddedIngredients = addedIngredients.filter(item => item !== ingredient.name);
+                setAddedIngredients(updatedAddedIngredients);
+                localStorage.setItem(`addedIngredients_${id}`, JSON.stringify(updatedAddedIngredients));
+            } else {
+                console.error('Failed to remove ingredient from cart');
+            }
+        } catch (error) {
+            console.error('Error removing ingredient from cart:', error);
+        }
+    };
+
+    const handleAddAllToCart = async () => {
+        try {
+            const response = await fetch('/api/cart/add-multiple', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                },
+                body: JSON.stringify({ ingredients: recipe.ingredients })
+            });
+
+            if (response.ok) {
+                setSuccessMessage('All ingredients added to cart successfully');
+                setShowSuccessModal(true);
+                const allIngredientNames = recipe.ingredients.map(ingredient => ingredient.name);
+                setAddedIngredients(allIngredientNames);
+                localStorage.setItem(`addedIngredients_${id}`, JSON.stringify(allIngredientNames));
+            } else {
+                console.error('Failed to add all ingredients to cart');
+            }
+        } catch (error) {
+            console.error('Error adding all ingredients to cart:', error);
+        }
+    };
 
     const handleDelete = async () => {
         try {
@@ -66,8 +148,13 @@ const RecipeDetails = () => {
             });
 
             if (response.ok) {
+                const data = await response.json();
+                setSuccessMessage(data.message); // Set success message from response
+                setShowSuccessModal(true); // Show success modal
                 dispatch({ type: 'DELETE_RECIPE', payload: id });
-                navigate('/my-recipes');
+                setTimeout(() => {
+                    navigate('/my-recipes'); // Navigate to My Recipes page after a delay
+                }, 2000); // Adjust the delay as needed
             } else {
                 console.error('Failed to delete recipe');
             }
@@ -139,13 +226,16 @@ const RecipeDetails = () => {
             <div className="recipe-info">
                 <p><strong>Description:</strong> {recipe.description}</p>
                 <p><strong>Total Time:</strong> {recipe.totalTime.hours} hours {recipe.totalTime.minutes} minutes</p>
-                <p><strong>Ingredients:</strong></p>
+                <p>
+                    <strong>Ingredients:</strong>
+                    <button className="add-all-to-cart-btn" onClick={handleAddAllToCart}>Add All to Cart</button>
+                </p>
                 <table className="ingredients-table">
                     <thead>
                         <tr>
                             <th>Name</th>
                             <th>Quantity</th>
-                            <th>Alternate</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -153,7 +243,23 @@ const RecipeDetails = () => {
                             <tr key={index}>
                                 <td>{ingredient.name}</td>
                                 <td>{ingredient.quantity}</td>
-                                <td>{ingredient.alternate.join(', ')}</td>
+                                <td>
+                                    {addedIngredients.includes(ingredient.name) ? (
+                                        <button
+                                            className="add-to-cart-btn"
+                                            onClick={() => handleRemoveFromCart(ingredient)}
+                                        >
+                                            Remove from cart
+                                        </button>
+                                    ) : (
+                                        <button
+                                            className="add-to-cart-btn"
+                                            onClick={() => handleAddToCart(ingredient)}
+                                        >
+                                            Add to Cart
+                                        </button>
+                                    )}
+                                </td>
                             </tr>
                         ))}
                     </tbody>
@@ -204,7 +310,9 @@ const RecipeDetails = () => {
             {user && user.userId === recipe.createdBy._id ? (
                 <div className="button-group">
                     <button className="btn update-btn" onClick={() => navigate(`/update-recipe/${recipe._id}`)}>Update</button>
-                    <button className="btn delete-btn" onClick={handleDelete}>Delete</button>
+                    <button className="btn delete-btn" onClick={handleDelete}>
+                        <span className="material-icons">delete</span>
+                    </button>
                 </div>
             ) : (
                 isSaved ? (

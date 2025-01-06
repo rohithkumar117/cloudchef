@@ -15,6 +15,7 @@ import MyRecipes from './pages/MyRecipes';
 import UpdateRecipe from './pages/UpdateRecipe';
 import SavedRecipes from './pages/SavedRecipes';
 import SearchResults from './pages/SearchResults';
+import Cart from './pages/Cart';
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
             <Route path="/my-recipes" element={<Layout><MyRecipes /></Layout>} />
             <Route path="/update-recipe/:id" element={<Layout><UpdateRecipe /></Layout>} />
             <Route path="/saved-recipes" element={<Layout><SavedRecipes /></Layout>} />
+            <Route path="/cart" element={<Layout><Cart /></Layout>} /> {/* Add this line */}
           </Routes>
         </div>
       </Router>

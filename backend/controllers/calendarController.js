@@ -3,7 +3,8 @@ const mongoose = require('mongoose');
 
 // Add a calendar entry
 const addCalendarEntry = async (req, res) => {
-    const { userId, recipeId, date } = req.body;
+    const userId = req.userId;
+    const { recipeId, date } = req.body;
 
     if (!mongoose.Types.ObjectId.isValid(userId) || !mongoose.Types.ObjectId.isValid(recipeId)) {
         return res.status(404).json({ error: 'Invalid user ID or recipe ID' });

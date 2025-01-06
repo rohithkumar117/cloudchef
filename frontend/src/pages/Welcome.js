@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { useRecipesContext } from '../hooks/useRecipesContext';
 import { useNavigate } from 'react-router-dom';
+import { useRecipesContext } from '../hooks/useRecipesContext';
 
 const Welcome = () => {
     const { user, dispatch } = useRecipesContext();
-    const [recipes, setRecipes] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
+    const [recipes, setRecipes] = useState([]);
     const navigate = useNavigate();
 
     useEffect(() => {

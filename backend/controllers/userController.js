@@ -17,7 +17,6 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-// Update user profile
 const updateUserProfile = async (req, res) => {
     const { id } = req.params;
     const { firstName, lastName, email, password, about, region } = req.body;
@@ -41,42 +40,29 @@ const updateUserProfile = async (req, res) => {
     }
 };
 
-// Get user by ID
 const getUserById = async (req, res) => {
     const { id } = req.params;
 
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(404).json({ error: 'Invalid user ID' });
+    }
+
     try {
-        const user = await User.findById(id).select('-password -savedRecipes -createdAt -updatedAt');
+        const user = await User.findById(id);
         if (!user) {
             return res.status(404).json({ error: 'User not found' });
         }
-
-        const createdRecipes = await Recipe.find({ createdBy: id });
-
-        const userInfo = {
-            _id: user._id,
-            fullName: `${user.firstName} ${user.lastName}`,
-            email: user.email,
-            profilePhoto: user.profilePhoto,
-            about: user.about,
-            region: user.region,
-            followers: user.followers,
-            following: user.following,
-            createdRecipes: createdRecipes
-        };
-
-        res.status(200).json(userInfo);
+        res.status(200).json(user);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 };
 
-// Save a recipe
 const saveRecipe = async (req, res) => {
     const { userId, recipeId } = req.body;
 
     if (!mongoose.Types.ObjectId.isValid(userId) || !mongoose.Types.ObjectId.isValid(recipeId)) {
-        return res.status(404).json({ error: 'Invalid user ID or recipe ID' });
+        return res.status(400).json({ error: 'Invalid user or recipe ID' });
     }
 
     try {
@@ -85,10 +71,13 @@ const saveRecipe = async (req, res) => {
             return res.status(404).json({ error: 'User not found' });
         }
 
-        if (!user.savedRecipes.includes(recipeId)) {
-            user.savedRecipes.push(recipeId);
-            await user.save();
+        const recipe = await Recipe.findById(recipeId);
+        if (!recipe) {
+            return res.status(404).json({ error: 'Recipe not found' });
         }
+
+        user.savedRecipes.push(recipeId);
+        await user.save();
 
         res.status(200).json({ message: 'Recipe saved successfully' });
     } catch (error) {
@@ -96,12 +85,11 @@ const saveRecipe = async (req, res) => {
     }
 };
 
-// Get saved recipes
 const getSavedRecipes = async (req, res) => {
     const { userId } = req.params;
 
     if (!mongoose.Types.ObjectId.isValid(userId)) {
-        return res.status(404).json({ error: 'Invalid user ID' });
+        return res.status(400).json({ error: 'Invalid user ID' });
     }
 
     try {
@@ -116,12 +104,11 @@ const getSavedRecipes = async (req, res) => {
     }
 };
 
-// Delete a saved recipe
 const deleteSavedRecipe = async (req, res) => {
     const { userId, recipeId } = req.body;
 
     if (!mongoose.Types.ObjectId.isValid(userId) || !mongoose.Types.ObjectId.isValid(recipeId)) {
-        return res.status(404).json({ error: 'Invalid user ID or recipe ID' });
+        return res.status(400).json({ error: 'Invalid user or recipe ID' });
     }
 
     try {
@@ -130,10 +117,10 @@ const deleteSavedRecipe = async (req, res) => {
             return res.status(404).json({ error: 'User not found' });
         }
 
-        user.savedRecipes = user.savedRecipes.filter(id => id.toString() !== recipeId);
+        user.savedRecipes.pull(recipeId);
         await user.save();
 
-        res.status(200).json({ message: 'Recipe removed from saved recipes successfully' });
+        res.status(200).json({ message: 'Recipe removed from saved recipes' });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }

@@ -1,5 +1,7 @@
 .profile-container {
     display: flex;
+    justify-content: center;
+    align-items: flex-start;
     min-height: 100vh;
     background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
     padding: 40px 20px;
@@ -56,17 +58,17 @@
     font-size: 2em;
     color: #333;
     font-weight: 600;
+    text-align: center;
 }
 
 .profile-content {
     display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
+    flex-direction: column;
+    align-items: center;
 }
 
 .profile-form {
-    flex: 1;
-    margin-right: 20px;
+    width: 100%;
 }
 
 .profile-photo {
@@ -79,7 +81,7 @@
 .profile-photo img {
     width: 150px;
     height: 150px;
-    border-radius: 50%;
+    border-radius: 50%; /* Make the photo circular */
     object-fit: cover;
     margin-bottom: 10px;
 }
@@ -95,6 +97,7 @@
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    margin-bottom: 20px; /* Add margin to separate from the update profile button */
 }
 
 .profile-photo label:hover {
@@ -105,6 +108,7 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    width: 100%;
 }
 
 .profile-info label {
@@ -146,6 +150,7 @@ button[type="submit"] {
     cursor: pointer;
     font-size: 1.1em;
     transition: background-color 0.3s ease, transform 0.2s ease;
+    margin-top: 20px; /* Add margin to separate from the upload photo button */
 }
 
 button[type="submit"]:hover {
