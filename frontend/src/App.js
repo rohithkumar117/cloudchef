@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Layout from './components/Layout';
+import RequireAuth from './components/RequireAuth';
 
 // pages and components 
 import Home from './pages/home';
@@ -27,16 +28,16 @@ function App() {
             <Route path="/" element={<Layout><LandingPage /></Layout>} />
             <Route path="/login" element={<Layout><Login /></Layout>} />
             <Route path="/register" element={<Layout><Register /></Layout>} />
-            <Route path="/welcome" element={<Layout><Welcome /></Layout>} />
-            <Route path="/home" element={<Layout><Home /></Layout>} />
-            <Route path="/profile" element={<Layout><Profile /></Layout>} />
-            <Route path="/recipe/:id" element={<Layout><RecipeDetails /></Layout>} />
-            <Route path="/search-results" element={<SearchResults />} />
-            <Route path="/add-recipe" element={<Layout><RecipeForm /></Layout>} />
-            <Route path="/my-recipes" element={<Layout><MyRecipes /></Layout>} />
-            <Route path="/update-recipe/:id" element={<Layout><UpdateRecipe /></Layout>} />
-            <Route path="/saved-recipes" element={<Layout><SavedRecipes /></Layout>} />
-            <Route path="/cart" element={<Layout><Cart /></Layout>} /> {/* Add this line */}
+            <Route path="/welcome" element={<RequireAuth><Layout><Welcome /></Layout></RequireAuth>} />
+            <Route path="/home" element={<RequireAuth><Layout><Home /></Layout></RequireAuth>} />
+            <Route path="/profile" element={<RequireAuth><Layout><Profile /></Layout></RequireAuth>} />
+            <Route path="/recipe/:id" element={<RequireAuth><Layout><RecipeDetails /></Layout></RequireAuth>} />
+            <Route path="/search-results" element={<RequireAuth><SearchResults /></RequireAuth>} />
+            <Route path="/add-recipe" element={<RequireAuth><Layout><RecipeForm /></Layout></RequireAuth>} />
+            <Route path="/my-recipes" element={<RequireAuth><Layout><MyRecipes /></Layout></RequireAuth>} />
+            <Route path="/update-recipe/:id" element={<RequireAuth><Layout><UpdateRecipe /></Layout></RequireAuth>} />
+            <Route path="/saved-recipes" element={<RequireAuth><Layout><SavedRecipes /></Layout></RequireAuth>} />
+            <Route path="/cart" element={<RequireAuth><Layout><Cart /></Layout></RequireAuth>} />
           </Routes>
         </div>
       </Router>
