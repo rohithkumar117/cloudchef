@@ -33,7 +33,7 @@ const addItemToCart = async (req, res) => {
         }
 
         await cart.save();
-        res.status(200).json(cart.items[cart.items.length - 1]); // Return the newly added item
+        res.status(200).json(existingItem || cart.items[cart.items.length - 1]); // Return the updated or newly added item
     } catch (error) {
         res.status(500).json({ error: error.message });
     }

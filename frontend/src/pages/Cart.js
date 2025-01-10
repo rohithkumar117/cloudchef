@@ -52,7 +52,16 @@ const Cart = () => {
 
             if (response.ok) {
                 const newCartItem = await response.json();
-                setCartItems(prevItems => [...prevItems, newCartItem]);
+                setCartItems(prevItems => {
+                    const existingItemIndex = prevItems.findIndex(item => item.ingredient.toLowerCase() === newCartItem.ingredient.toLowerCase());
+                    if (existingItemIndex !== -1) {
+                        const updatedItems = [...prevItems];
+                        updatedItems[existingItemIndex] = newCartItem;
+                        return updatedItems;
+                    } else {
+                        return [...prevItems, newCartItem];
+                    }
+                });
                 setNewItem('');
                 setNewQuantity(1);
                 setShowPopup(false);
