@@ -5,7 +5,7 @@ const cartSchema = new Schema({
     userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     items: [{
         ingredient: { type: String },
-        quantity: { type: String }
+        quantity: { type: Number } // Change this to Number
     }]
 }, { timestamps: true });
 

@@ -51,17 +51,13 @@ const Profile = () => {
                 dispatch({ type: 'LOGOUT' });
                 localStorage.removeItem('token');
                 navigate('/login');
+                setShowLogoutSuccessModal(true); // Show the logout success modal
             } else {
                 console.error('Failed to log out');
             }
         }).catch(error => {
             console.error('Error logging out:', error);
         });
-    };
-
-    const handleOkClick = () => {
-        setShowLogoutSuccessModal(false);
-        navigate('/login');
     };
 
     const handleUpdateProfile = async (e) => {
@@ -98,10 +94,33 @@ const Profile = () => {
         }
     };
 
+    const handlePhotoUpload = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setProfilePhoto(file);
+        }
+    };
+
+    const handleOkClick = () => {
+        setShowLogoutSuccessModal(false);
+    };
+
     const renderSection = () => {
         return (
             <form onSubmit={handleUpdateProfile} className="profile-form">
                 <div className="profile-info">
+                    <div className="profile-photo-container">
+                        <div className="profile-photo">
+                            <img src={profilePhoto} alt="Profile" />
+                        </div>
+                        <label htmlFor="upload-photo" className="upload-photo-label">Choose File</label>
+                        <input
+                            type="file"
+                            id="upload-photo"
+                            className="upload-photo-input"
+                            onChange={handlePhotoUpload}
+                        />
+                    </div>
                     <label>First Name:</label>
                     <input
                         type="text"
@@ -114,24 +133,19 @@ const Profile = () => {
                         value={user.lastName}
                         readOnly
                     />
-                    <label>Profile Photo:</label>
-                    <div className="profile-photo">
-                        {profilePhoto ? (
-                            <img src={profilePhoto instanceof File ? URL.createObjectURL(profilePhoto) : profilePhoto} alt="Profile" />
-                        ) : (
-                            <img src="/default-profile.png" alt="Default Profile" />
-                        )}
-                        <input
-                            type="file"
-                            accept="image/*"
-                            id="profilePhotoUpload"
-                            style={{ display: 'none' }}
-                            onChange={(e) => setProfilePhoto(e.target.files[0])}
-                        />
-                        <label htmlFor="profilePhotoUpload" className="upload-button">
-                            Upload Photo
-                        </label>
-                    </div>
+                    <label>Email:</label>
+                    <input
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                    />
+                    <label>Password:</label>
+                    <input
+                        type="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                    />
                     <label>About:</label>
                     <textarea
                         value={about}
@@ -142,18 +156,6 @@ const Profile = () => {
                         type="text"
                         value={region}
                         onChange={(e) => setRegion(e.target.value)}
-                    />
-                    <label>Email:</label>
-                    <input
-                        type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                    />
-                    <label>Password:</label>
-                    <input
-                        type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
                     />
                     <button type="submit">Update Profile</button>
                     {error && <div className="error">{error}</div>}

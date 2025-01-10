@@ -8,6 +8,12 @@ const BackButton = () => {
     const handleBack = () => {
         if (location.pathname === '/login' || location.pathname === '/register') {
             navigate('/'); // Navigate to LandingPage
+        } else if (location.pathname === '/cart') {
+            navigate('/welcome'); // Navigate to Welcome page from Cart page
+        } else if (location.pathname === '/savedrecipe') {
+            navigate('/welcome'); // Navigate to Welcome page from SavedRecipe page
+        } else if (location.pathname === '/myrecipes') {
+            navigate('/welcome'); // Navigate to Welcome page from MyRecipes page
         } else {
             navigate(-1); // Navigate to the previous page
         }

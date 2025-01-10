@@ -4,18 +4,42 @@ const mongoose = require('mongoose');
 // Add an item to the cart
 const addItemToCart = async (req, res) => {
     const userId = req.userId;
-    const { ingredient, quantity } = req.body;
+    const { ingredient, quantity, ingredientId } = req.body;
 
     if (!mongoose.Types.ObjectId.isValid(userId)) {
         return res.status(404).json({ error: 'Invalid user ID' });
     }
 
     try {
-        const cart = await Cart.findOneAndUpdate(
-            { userId },
-            { $push: { items: { ingredient, quantity } } },
-            { new: true, upsert: true }
-        );
+        const cart = await Cart.findOne({ userId });
+
+        if (!cart) {
+            // If no cart exists, create a new one with the item
+            const newCart = await Cart.create({
+                userId,
+                items: [{ ingredient, quantity: parseInt(quantity, 10) }]
+            });
+            return res.status(200).json(newCart);
+        }
+
+        let existingItem;
+        if (ingredientId) {
+            // Find the item by ingredientId
+            existingItem = cart.items.id(ingredientId);
+        } else {
+            // Find the item by ingredient name
+            existingItem = cart.items.find(item => item.ingredient.toLowerCase() === ingredient.toLowerCase());
+        }
+
+        if (existingItem) {
+            // Update the quantity of the existing item
+            existingItem.quantity = parseInt(existingItem.quantity, 10) + parseInt(quantity, 10);
+        } else {
+            // Add the new item to the cart
+            cart.items.push({ ingredient, quantity: parseInt(quantity, 10) });
+        }
+
+        await cart.save();
         res.status(200).json(cart);
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -32,16 +56,32 @@ const addMultipleItemsToCart = async (req, res) => {
     }
 
     try {
-        const itemsToAdd = ingredients.map(ingredient => ({
-            ingredient: ingredient.name,
-            quantity: ingredient.quantity
-        }));
+        const cart = await Cart.findOne({ userId });
 
-        const cart = await Cart.findOneAndUpdate(
-            { userId },
-            { $push: { items: { $each: itemsToAdd } } },
-            { new: true, upsert: true }
-        );
+        if (!cart) {
+            // If no cart exists, create a new one with the items
+            const newCart = await Cart.create({
+                userId,
+                items: ingredients.map(ingredient => ({
+                    ingredient: ingredient.name,
+                    quantity: parseInt(ingredient.quantity, 10)
+                }))
+            });
+            return res.status(200).json(newCart);
+        }
+
+        // Update the quantities of existing items or add new items
+        ingredients.forEach(ingredient => {
+            const existingItem = cart.items.find(item => item.ingredient.toLowerCase() === ingredient.name.toLowerCase());
+
+            if (existingItem) {
+                existingItem.quantity = parseInt(existingItem.quantity, 10) + parseInt(ingredient.quantity, 10);
+            } else {
+                cart.items.push({ ingredient: ingredient.name, quantity: parseInt(ingredient.quantity, 10) });
+            }
+        });
+
+        await cart.save();
         res.status(200).json(cart);
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -93,9 +133,40 @@ const deleteItemFromCart = async (req, res) => {
     }
 };
 
+// Update the quantity of an item in the cart
+const updateItemQuantity = async (req, res) => {
+    const userId = req.userId;
+    const { ingredientId, quantity } = req.body;
+
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+        return res.status(404).json({ error: 'Invalid user ID' });
+    }
+
+    try {
+        const cart = await Cart.findOne({ userId });
+
+        if (!cart) {
+            return res.status(404).json({ error: 'No cart found for this user' });
+        }
+
+        const item = cart.items.id(ingredientId);
+
+        if (!item) {
+            return res.status(404).json({ error: 'No such item in the cart' });
+        }
+
+        item.quantity = parseInt(quantity, 10);
+        await cart.save();
+        res.status(200).json(cart);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
 module.exports = {
     addItemToCart,
     addMultipleItemsToCart,
     getCartItems,
-    deleteItemFromCart
+    deleteItemFromCart,
+    updateItemQuantity
 };

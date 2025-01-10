@@ -55,12 +55,29 @@ const Cart = () => {
         }
     };
 
-    const handleQuantityChange = (ingredientId, newQuantity) => {
+    const handleQuantityChange = async (ingredientId, newQuantity) => {
         if (newQuantity < 1) return; // Prevent quantity from going below 1
 
-        setCartItems(cartItems.map(item =>
-            item._id === ingredientId ? { ...item, quantity: newQuantity } : item
-        ));
+        try {
+            const response = await fetch('/api/cart/update', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                },
+                body: JSON.stringify({ ingredientId, quantity: newQuantity })
+            });
+
+            if (response.ok) {
+                setCartItems(cartItems.map(item =>
+                    item._id === ingredientId ? { ...item, quantity: parseInt(newQuantity, 10) } : item
+                ));
+            } else {
+                console.error('Failed to update ingredient quantity');
+            }
+        } catch (error) {
+            console.error('Error updating ingredient quantity:', error);
+        }
     };
 
     return (

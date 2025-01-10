@@ -71,7 +71,7 @@ const RecipeDetails = () => {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
                 },
-                body: JSON.stringify({ ingredient: ingredient.name, quantity: ingredient.quantity })
+                body: JSON.stringify({ ingredient: ingredient.name, quantity: parseInt(ingredient.quantity, 10) })
             });
 
             if (response.ok) {
@@ -96,7 +96,7 @@ const RecipeDetails = () => {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
                 },
-                body: JSON.stringify({ ingredient: ingredient.name })
+                body: JSON.stringify({ ingredientId: ingredient._id })
             });
 
             if (response.ok) {
