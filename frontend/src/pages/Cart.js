@@ -5,6 +5,9 @@ import './Cart.css';
 const Cart = () => {
     const { user } = useRecipesContext();
     const [cartItems, setCartItems] = useState([]);
+    const [newItem, setNewItem] = useState('');
+    const [newQuantity, setNewQuantity] = useState(1);
+    const [showPopup, setShowPopup] = useState(false);
 
     useEffect(() => {
         const fetchCartItems = async () => {
@@ -33,6 +36,33 @@ const Cart = () => {
 
         fetchCartItems();
     }, [user]);
+
+    const handleAddItem = async () => {
+        if (!newItem || newQuantity < 1) return;
+
+        try {
+            const response = await fetch('/api/cart/add', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                },
+                body: JSON.stringify({ ingredient: newItem, quantity: newQuantity })
+            });
+
+            if (response.ok) {
+                const newCartItem = await response.json();
+                setCartItems(prevItems => [...prevItems, newCartItem]);
+                setNewItem('');
+                setNewQuantity(1);
+                setShowPopup(false);
+            } else {
+                console.error('Failed to add item to cart');
+            }
+        } catch (error) {
+            console.error('Error adding item to cart:', error);
+        }
+    };
 
     const handleDelete = async (ingredientId) => {
         try {
@@ -83,6 +113,28 @@ const Cart = () => {
     return (
         <div className="cart">
             <h1>My Cart</h1>
+            <button className="add-ingredient-btn" onClick={() => setShowPopup(true)}>Add Your Own Ingredient</button>
+            {showPopup && (
+                <div className="popup">
+                    <div className="popup-content">
+                        <h2>Add Ingredient</h2>
+                        <input
+                            type="text"
+                            placeholder="Item name"
+                            value={newItem}
+                            onChange={(e) => setNewItem(e.target.value)}
+                        />
+                        <input
+                            type="number"
+                            min="1"
+                            value={newQuantity}
+                            onChange={(e) => setNewQuantity(parseInt(e.target.value, 10))}
+                        />
+                        <button onClick={handleAddItem}>Add</button>
+                        <button onClick={() => setShowPopup(false)}>Cancel</button>
+                    </div>
+                </div>
+            )}
             <table className="cart-table">
                 <thead>
                     <tr>

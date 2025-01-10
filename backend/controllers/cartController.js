@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 // Add an item to the cart
 const addItemToCart = async (req, res) => {
     const userId = req.userId;
-    const { ingredient, quantity, ingredientId } = req.body;
+    const { ingredient, quantity } = req.body;
 
     if (!mongoose.Types.ObjectId.isValid(userId)) {
         return res.status(404).json({ error: 'Invalid user ID' });
@@ -19,17 +19,10 @@ const addItemToCart = async (req, res) => {
                 userId,
                 items: [{ ingredient, quantity: parseInt(quantity, 10) }]
             });
-            return res.status(200).json(newCart);
+            return res.status(200).json(newCart.items[0]); // Return the newly added item
         }
 
-        let existingItem;
-        if (ingredientId) {
-            // Find the item by ingredientId
-            existingItem = cart.items.id(ingredientId);
-        } else {
-            // Find the item by ingredient name
-            existingItem = cart.items.find(item => item.ingredient.toLowerCase() === ingredient.toLowerCase());
-        }
+        const existingItem = cart.items.find(item => item.ingredient.toLowerCase() === ingredient.toLowerCase());
 
         if (existingItem) {
             // Update the quantity of the existing item
@@ -40,7 +33,7 @@ const addItemToCart = async (req, res) => {
         }
 
         await cart.save();
-        res.status(200).json(cart);
+        res.status(200).json(cart.items[cart.items.length - 1]); // Return the newly added item
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
