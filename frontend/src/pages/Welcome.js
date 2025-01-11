@@ -53,6 +53,9 @@ const Welcome = () => {
     return (
         <div className="welcome-container">
             <h1>Welcome, {user ? user.firstName : 'Guest'}!</h1>
+            {user && user.profilePhoto && (
+                <img src={user.profilePhoto} alt="Profile" className="profile-photo" />
+            )}
             <p>Explore and share your favorite recipes.</p>
             <div className="search-bar">
                 <input
@@ -77,7 +80,7 @@ const Welcome = () => {
                         style={{ cursor: 'pointer', textAlign: 'center', marginBottom: '20px' }}
                     >
                         {recipe.mainImage && (
-                            <img src={`${process.env.REACT_APP_BASE_URL}${recipe.mainImage}`} alt={recipe.title} style={{ width: '100%', borderRadius: '8px' }} />
+                            <img src={`http://localhost:4000${recipe.mainImage}`} alt={recipe.title} style={{ width: '100%', borderRadius: '8px' }} />
                         )}
                         <h4>{recipe.title}</h4>
                     </div>

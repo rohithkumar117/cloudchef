@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { useRecipesContext } from '../hooks/useRecipesContext';
 import './Profile.css'; // Import the CSS file for styling
 
-
 const Profile = () => {
     const { user, dispatch } = useRecipesContext();
     const navigate = useNavigate();
@@ -27,7 +26,7 @@ const Profile = () => {
                 const data = await response.json();
                 if (response.ok) {
                     setEmail(data.email);
-                    setProfilePhoto(data.profilePhoto ? `${process.env.REACT_APP_BASE_URL}${data.profilePhoto}` : null);
+                    setProfilePhoto(data.profilePhoto ? `http://localhost:4000${data.profilePhoto}` : null);
                     setAbout(data.about);
                     setRegion(data.region);
                 } else {
@@ -112,7 +111,7 @@ const Profile = () => {
                 <div className="profile-info">
                     <div className="profile-photo-container">
                         <div className="profile-photo">
-                            <img src={`${process.env.REACT_APP_BASE_URL}${profilePhoto}`} alt="Profile" />
+                            <img src={profilePhoto} alt="Profile" />
                         </div>
                         <label htmlFor="upload-photo" className="upload-photo-label">Choose File</label>
                         <input

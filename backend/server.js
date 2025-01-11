@@ -12,10 +12,7 @@ const reportRoutes = require('./routes/reports');
 const app = express();
 
 // Middleware
-app.use(cors({
-  origin: 'https://cloudchef-frontend.vercel.app',
-  methods: ['GET', 'POST'],
-}));
+app.use(cors());
 app.use(express.json());
 app.use('/profilePhotos', express.static(path.join(__dirname, 'profilePhotos')));
 

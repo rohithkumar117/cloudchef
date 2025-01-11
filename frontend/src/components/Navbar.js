@@ -20,7 +20,7 @@ const Navbar = () => {
                 });
                 const data = await response.json();
                 if (response.ok) {
-                    setProfilePhoto(data.profilePhoto ? `${process.env.REACT_APP_BASE_URL}${data.profilePhoto}` : null);
+                    setProfilePhoto(data.profilePhoto ? `http://localhost:4000${data.profilePhoto}` : null);
                 } else {
                     console.error('Failed to fetch user information:', data.error);
                 }

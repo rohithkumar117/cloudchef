@@ -220,7 +220,7 @@ const RecipeDetails = () => {
     return (
         <div className="recipe-details">
             {recipe.mainImage && (
-                <img src={`${process.env.REACT_APP_BASE_URL}${recipe.mainImage}`} alt={recipe.title} style={{ width: '100%', borderRadius: '8px' }} />
+                <img src={`http://localhost:4000${recipe.mainImage}`} alt={recipe.title} className="recipe-image" />
             )}
             <h2>{recipe.title}</h2>
             <div className="recipe-info">
@@ -292,7 +292,7 @@ const RecipeDetails = () => {
                     {recipe.steps.map((step, index) => (
                         <li key={index}>
                             {step.text}
-                            {step.image && <img src={`${process.env.REACT_APP_BASE_URL}${step.image}`} alt={`Step ${step.stepNumber}`} className="step-image" />}
+                            {step.image && <img src={`http://localhost:4000${step.image}`} alt={`Step ${step.stepNumber}`} className="step-image" />}
                             {step.ingredients && step.ingredients.length > 0 && (
                                 <ul>
                                     {step.ingredients.map((ing, ingIndex) => (

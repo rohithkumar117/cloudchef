@@ -52,7 +52,7 @@ const MyRecipes = () => {
                             style={{ cursor: 'pointer', textAlign: 'center', marginBottom: '20px' }}
                         >
                             {recipe.mainImage && (
-                                <img src={`${process.env.REACT_APP_BASE_URL}${recipe.mainImage}`} alt={recipe.title} style={{ width: '100%', borderRadius: '8px' }} />
+                                <img src={`http://localhost:4000${recipe.mainImage}`} alt={recipe.title} style={{ width: '100%', borderRadius: '8px' }} />
                             )}
                             <h4>{recipe.title}</h4>
                         </div>
