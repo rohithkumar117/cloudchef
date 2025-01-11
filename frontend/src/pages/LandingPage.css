@@ -3,7 +3,7 @@
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background: url('E:\CHEF-APP-main\CHEF-APP-main\frontend\build\bear.jpg') no-repeat center center/cover;
+    background: url('/public/bear.jpg') no-repeat center center/cover;
     font-family: 'Roboto', sans-serif;
     color: #fff;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
