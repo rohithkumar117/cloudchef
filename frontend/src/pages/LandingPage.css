@@ -3,7 +3,7 @@
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background: url('C:\Users\LENOVO\OneDrive\Pictures\Saved Pictures\WildReindeer_EN-US0339848363_1920x1080.jpg') no-repeat center center/cover;
+    background: url('E:\CHEF-APP-main\CHEF-APP-main\frontend\build\bear.jpg') no-repeat center center/cover;
     font-family: 'Roboto', sans-serif;
     color: #fff;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
@@ -70,22 +70,18 @@
 .auth-buttons {
     display: flex;
     justify-content: center; /* Center the buttons horizontally */
-    gap: 20px; /* Add space between the buttons */
-    margin-top: 20px; /* Add space above the buttons */
+    gap: 20px;
 }
 
 .auth-buttons a {
-    display: inline-block; /* Make the links appear as buttons */
-    padding: 10px 20px; /* Add padding for a button-like appearance */
-    color: #fff; /* Text color */
-    background-color: #28a745; /* Green background color */
-    border-radius: 5px; /* Rounded corners */
-    text-decoration: none; /* Remove underline */
-    font-weight: bold;
-    transition: background-color 0.3s, color 0.3s; /* Smooth transition */
+    background-color: #28a745;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
 }
 
 .auth-buttons a:hover {
-    background-color: #218838; /* Darker green on hover */
-    color: #fff; /* Ensure text remains white on hover */
+    background-color: #218838;
 }
