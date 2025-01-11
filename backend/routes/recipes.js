@@ -6,8 +6,8 @@ const {
     createRecipe,
     deleteRecipe,
     updateRecipe,
-    searchRecipes,
-    getRecipesByUserId
+    getRecipesByUserId,
+    searchRecipes // Add this line
 } = require('../controllers/recipeController');
 const requireAuth = require('../middleware/authMiddleware');
 const router = express.Router();
@@ -32,6 +32,9 @@ router.post('/', upload.single('mainImage'), createRecipe);
 // GET all recipes
 router.get('/', getRecipes);
 
+// Add this route for searching recipes
+router.get('/search', searchRecipes);
+
 // GET a single recipe
 router.get('/:id', getRecipe);
 
@@ -44,7 +47,6 @@ router.patch('/:id', upload.single('mainImage'), updateRecipe);
 // GET recipes by userId
 router.get('/user/:userId', getRecipesByUserId);
 
-// SEARCH recipes
-router.get('/search', searchRecipes);
+
 
 module.exports = router;

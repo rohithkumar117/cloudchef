@@ -30,6 +30,7 @@ const getRecipes = async (req, res) => {
 // Get a single recipe
 const getRecipe = async (req, res) => {
     const { id } = req.params;
+
     if (!mongoose.Types.ObjectId.isValid(id)) {
         return res.status(404).json({ error: 'No such recipe' });
     }
@@ -187,23 +188,7 @@ const updateRecipe = async (req, res) => {
     }
 };
 
-// Search recipes by title and ingredients
-const searchRecipes = async (req, res) => {
-    const { query } = req.query; // Get the search query from the request
 
-    try {
-        const recipes = await Recipe.find({
-            $or: [
-                { title: { $regex: query, $options: 'i' } }, // Case-insensitive search by title
-                { 'ingredients.name': { $regex: query, $options: 'i' } } // Case-insensitive search by ingredient name
-            ]
-        });
-
-        res.status(200).json(recipes);
-    } catch (error) {
-        res.status(400).json({ error: error.message });
-    }
-};
 
 // Get recipes by user ID
 const getRecipesByUserId = async (req, res) => {
@@ -252,13 +237,33 @@ const saveRecipe = async (req, res) => {
     }
 };
 
+
+const searchRecipes = async (req, res) => {
+    const { query } = req.query;
+    try {
+      const results = await Recipe.find({
+        $or: [
+          { title: { $regex: query, $options: 'i' } },
+          { 'ingredients.name': { $regex: query, $options: 'i' } },
+          { tags: { $regex: query, $options: 'i' } }
+        ]
+      });
+      if (!results || results.length === 0) {
+        return res.status(404).json({ error: 'No recipes found' });
+      }
+      res.status(200).json(results);
+    } catch (error) {
+      res.status(400).json({ error: error.message });
+    }
+  };
+
 module.exports = {
     getRecipes,
     getRecipe,
     createRecipe,
     deleteRecipe,
     updateRecipe,
-    searchRecipes,
     getRecipesByUserId,
-    saveRecipe
+    saveRecipe,
+    searchRecipes // Add this line
 };
