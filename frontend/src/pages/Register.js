@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { useRecipesContext } from "../hooks/useRecipesContext";
 
 const Register = () => {
-    const { dispatch } = useRecipesContext();
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');

@@ -17,7 +17,7 @@ const Cart = () => {
             }
 
             try {
-                const response = await fetch(`/api/cart`, {
+                const response = await fetch(`${process.env.REACT_APP_BASE_URL}/api/cart`, {
                     headers: {
                         'Authorization': `Bearer ${localStorage.getItem('token')}`
                     }

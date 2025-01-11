@@ -3,6 +3,7 @@ import { useRecipesContext } from '../hooks/useRecipesContext';
 import { useNavigate } from 'react-router-dom';
 import './SavedRecipes.css'; // Import the CSS file for styling
 
+
 const SavedRecipes = () => {
     const { user } = useRecipesContext();
     const [savedRecipes, setSavedRecipes] = useState([]);
@@ -67,7 +68,7 @@ const SavedRecipes = () => {
                             style={{ cursor: 'pointer', textAlign: 'center', marginBottom: '20px' }}
                         >
                             {recipe.mainImage && (
-                                <img src={`http://localhost:4000${recipe.mainImage}`} alt={recipe.title} style={{ width: '100%', borderRadius: '8px' }} />
+                                <img src={`${process.env.REACT_APP_BASE_URL}${recipe.mainImage}`} alt={recipe.title} style={{ width: '100%', borderRadius: '8px' }} />
                             )}
                             <h4>{recipe.title}</h4>
                             <button className="delete-btn" onClick={(e) => handleDelete(recipe._id, e)}>Delete</button>

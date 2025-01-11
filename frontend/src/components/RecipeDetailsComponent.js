@@ -23,7 +23,7 @@ const RecipeDetailsComponent = ({ recipe }) => {
     return (
         <div className="recipe-details">
             {recipe.imageUrl && (
-                <img src={`http://localhost:4000${recipe.imageUrl}`} alt={recipe.title} style={{ width: '100%', borderRadius: '8px' }} />
+                <img src={`${process.env.REACT_APP_BASE_URL}${recipe.imageUrl}`} alt={recipe.title} style={{ width: '100%', borderRadius: '8px' }} />
             )}
             <h4>{recipe.title}</h4>
             <p><strong>Ingredients:</strong> {recipe.ingredients}</p>

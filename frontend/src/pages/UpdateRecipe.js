@@ -210,6 +210,7 @@ const UpdateRecipe = () => {
                             onChange={(e) => handleStepChange(index, 'timer', parseInt(e.target.value, 10))}
                             required
                         />
+                        {step.image && <img src={`${process.env.REACT_APP_BASE_URL}${step.image}`} alt={`Step ${step.stepNumber}`} className="step-image" />}
                     </div>
                 ))}
                 <button type="button" onClick={handleAddStep}>Add Step</button>
