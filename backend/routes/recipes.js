@@ -9,6 +9,7 @@ const {
     getRecipesByUserId,
     searchRecipes // Add this line
 } = require('../controllers/recipeController');
+const { generateRecipe } = require('../controllers/recipeGenerationController');
 const requireAuth = require('../middleware/authMiddleware');
 const router = express.Router();
 
@@ -47,6 +48,7 @@ router.patch('/:id', upload.single('mainImage'), updateRecipe);
 // GET recipes by userId
 router.get('/user/:userId', getRecipesByUserId);
 
-
+// POST generate a recipe
+router.post('/generate-recipe', generateRecipe);
 
 module.exports = router;

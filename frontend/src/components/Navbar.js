@@ -47,6 +47,7 @@ const Navbar = () => {
                         <Link to="/cart" className="cart-link">
                             <span className="material-icons">shopping_cart</span>
                         </Link>
+                        <Link to="/generate-recipe">Generate Recipe</Link>
                         {profilePhoto ? (
                             <img
                                 src={profilePhoto}

@@ -17,6 +17,7 @@ import UpdateRecipe from './pages/UpdateRecipe';
 import SavedRecipes from './pages/SavedRecipes';
 import SearchResults from './pages/SearchResults';
 import Cart from './pages/Cart';
+import GenerateRecipe from './pages/GenerateRecipe';
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function App() {
             <Route path="/update-recipe/:id" element={<RequireAuth><Layout><UpdateRecipe /></Layout></RequireAuth>} />
             <Route path="/saved-recipes" element={<RequireAuth><Layout><SavedRecipes /></Layout></RequireAuth>} />
             <Route path="/cart" element={<RequireAuth><Layout><Cart /></Layout></RequireAuth>} />
+            <Route path="/generate-recipe" element={<RequireAuth><Layout><GenerateRecipe /></Layout></RequireAuth>} />
           </Routes>
         </div>
       </Router>

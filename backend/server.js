@@ -20,7 +20,7 @@ app.use('/profilePhotos', express.static(path.join(__dirname, 'profilePhotos')))
 app.use('/api/recipes', recipeRoutes);
 app.use('/api', authRoutes);
 app.use('/api/users', userRoutes);
-app.use('/api/calendar', calendarRoutes); // Use calendar routes
+app.use('/api/calendar', calendarRoutes);
 app.use('/api/cart', cartRoutes);
 app.use('/api/reports', reportRoutes);
 
