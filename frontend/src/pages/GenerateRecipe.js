@@ -9,8 +9,10 @@ const GenerateRecipe = () => {
     const [dietaryPreferences, setDietaryPreferences] = useState('');
     const [generatedRecipe, setGeneratedRecipe] = useState(null);
     const [error, setError] = useState(null);
+    const [loading, setLoading] = useState(false); // Add loading state
 
     const handleGenerateRecipe = async () => {
+        setLoading(true); // Set loading to true when the request starts
         try {
             const response = await fetch('/api/recipes/generate-recipe', {
                 method: 'POST',
@@ -36,6 +38,8 @@ const GenerateRecipe = () => {
             }
         } catch (error) {
             setError('Failed to generate recipe');
+        } finally {
+            setLoading(false); // Set loading to false when the request completes
         }
     };
 
@@ -78,7 +82,9 @@ const GenerateRecipe = () => {
                 value={dietaryPreferences}
                 onChange={(e) => setDietaryPreferences(e.target.value)}
             />
-            <button onClick={handleGenerateRecipe}>Generate My Recipe</button>
+            <button onClick={handleGenerateRecipe} disabled={loading}>
+                {loading ? 'Generating...' : 'Generate My Recipe'}
+            </button>
             {error && <p className="error">{error}</p>}
             {generatedRecipe && (
                 <div className="generated-recipe">
