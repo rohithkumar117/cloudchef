@@ -69,9 +69,8 @@
 
 .profile-form {
     display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    width: 100%;
+    flex-direction: column;
+    gap: 20px;
 }
 
 .profile-form-left {
@@ -87,26 +86,23 @@
 }
 
 .profile-photo-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 20px;
+    flex: 1;
+    text-align: center;
 }
 
 .profile-photo {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-left: 20px;
+    margin-left: -30px;
     margin-bottom: 20px;
 }
 
 .profile-photo img {
-    width: 150px;
-    height: 150px;
-    border-radius: 50%; /* Make the photo circular */
-    object-fit: cover;
-    margin-bottom: 10px;
+    width: 150px; /* Increase the width */
+    height: 150px; /* Increase the height */
+    border-radius: 50%;
+    margin-bottom: 15px;
 }
 
 .profile-photo input {
@@ -147,10 +143,10 @@
 }
 
 .profile-info {
+    flex: 2;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    width: 100%;
+    gap: 10px;
 }
 
 .profile-info label {

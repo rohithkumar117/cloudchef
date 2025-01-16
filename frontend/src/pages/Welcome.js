@@ -38,6 +38,12 @@ const Welcome = () => {
         }
     };
 
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            handleSearch();
+        }
+    };
+
     const handleAddRecipe = () => {
         navigate('/add-recipe');
     };
@@ -48,6 +54,10 @@ const Welcome = () => {
 
     const handleSavedRecipes = () => {
         navigate('/saved-recipes');
+    };
+
+    const handleGenerateRecipe = () => {
+        navigate('/generate-recipe');
     };
 
     return (
@@ -63,12 +73,14 @@ const Welcome = () => {
                     placeholder="Search recipes..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
+                    onKeyDown={handleKeyDown} // Add this line
                 />
                 <div className="button-group">
                     <button onClick={handleSearch}>Search</button>
                     <button onClick={handleAddRecipe}>Add Recipe</button>
                     <button onClick={handleMyRecipes}>My Recipes</button>
                     <button onClick={handleSavedRecipes}>Saved Recipes</button>
+                    <button onClick={handleGenerateRecipe}>Generate Recipe</button>
                 </div>
             </div>
             <div className="recipes-grid">

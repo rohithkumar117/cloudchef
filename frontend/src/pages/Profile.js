@@ -60,6 +60,13 @@ const Profile = () => {
         });
     };
 
+    const handlePhotoUpload = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setProfilePhoto(file);
+        }
+    };
+
     const handleUpdateProfile = async (e) => {
         e.preventDefault();
 
@@ -87,17 +94,9 @@ const Profile = () => {
                 dispatch({ type: 'LOGIN', payload: json });
                 setError(null);
                 alert('Profile updated successfully');
-                setProfilePhoto(json.profilePhoto ? `http://localhost:4000${json.profilePhoto}` : null);
             }
         } catch (error) {
             setError('Failed to update profile');
-        }
-    };
-
-    const handlePhotoUpload = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            setProfilePhoto(file);
         }
     };
 
@@ -106,62 +105,90 @@ const Profile = () => {
     };
 
     const renderSection = () => {
-        return (
-            <form onSubmit={handleUpdateProfile} className="profile-form">
-                <div className="profile-info">
-                    <div className="profile-photo-container">
-                        <div className="profile-photo">
-                            <img src={profilePhoto} alt="Profile" />
+        switch (activeSection) {
+            case 'profile':
+                return (
+                    <form onSubmit={handleUpdateProfile} className="profile-form">
+                        <div style={{ display: 'flex', gap: '20px' }}>
+                            {/* Profile Photo Section */}
+                            <div className="profile-photo-container">
+                                <div className="profile-photo">
+                                    <img src={profilePhoto || 'default-photo.jpg'} alt="Profile" />
+                                    <label htmlFor="upload-photo" className="upload-photo-label">Update Photo</label>
+                                    <input
+                                        type="file"
+                                        id="upload-photo"
+                                        className="upload-photo-input"
+                                        onChange={handlePhotoUpload}
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Profile Info Section */}
+                            <div className="profile-info">
+                                <label>First Name:</label>
+                                <input
+                                    type="text"
+                                    value={user.firstName}
+                                    readOnly
+                                />
+                                <label>Last Name:</label>
+                                <input
+                                    type="text"
+                                    value={user.lastName}
+                                    readOnly
+                                />
+                                <label>About:</label>
+                                <textarea
+                                    value={about}
+                                    onChange={(e) => setAbout(e.target.value)}
+                                />
+                                <button type="submit">Update Profile</button>
+                                {error && <div className="error">{error}</div>}
+                            </div>
                         </div>
-                        <label htmlFor="upload-photo" className="upload-photo-label">Choose File</label>
-                        <input
-                            type="file"
-                            id="upload-photo"
-                            className="upload-photo-input"
-                            onChange={handlePhotoUpload}
-                        />
-                    </div>
-                    <label>First Name:</label>
-                    <input
-                        type="text"
-                        value={user.firstName}
-                        readOnly
-                    />
-                    <label>Last Name:</label>
-                    <input
-                        type="text"
-                        value={user.lastName}
-                        readOnly
-                    />
-                    <label>Email:</label>
-                    <input
-                        type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                    />
-                    <label>Password:</label>
-                    <input
-                        type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                    />
-                    <label>About:</label>
-                    <textarea
-                        value={about}
-                        onChange={(e) => setAbout(e.target.value)}
-                    />
-                    <label>Region:</label>
-                    <input
-                        type="text"
-                        value={region}
-                        onChange={(e) => setRegion(e.target.value)}
-                    />
-                    <button type="submit">Update Profile</button>
-                    {error && <div className="error">{error}</div>}
-                </div>
-            </form>
-        );
+                    </form>
+                );
+            case 'security':
+                return (
+                    <form onSubmit={handleUpdateProfile} className="profile-form">
+                        <div className="profile-info">
+                            <label>Email:</label>
+                            <input
+                                type="email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                required
+                            />
+                            <label>Password:</label>
+                            <input
+                                type="password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                            />
+                            <button type="submit">Update Security</button>
+                            {error && <div className="error">{error}</div>}
+                        </div>
+                    </form>
+                );
+            case 'location':
+                return (
+                    <form onSubmit={handleUpdateProfile} className="profile-form">
+                        <div className="profile-info">
+                            <label>Region:</label>
+                            <input
+                                type="text"
+                                value={region}
+                                onChange={(e) => setRegion(e.target.value)}
+                            />
+                            <button type="submit">Update Location</button>
+                            {error && <div className="error">{error}</div>}
+                        </div>
+                    </form>
+                );
+            default:
+                return null;
+        }
     };
 
     return (
@@ -170,14 +197,14 @@ const Profile = () => {
                 <h3>Account Information</h3>
                 <ul>
                     <li onClick={() => setActiveSection('profile')}>Profile Settings</li>
-                    <li onClick={() => setActiveSection('location')}>Location</li>
                     <li onClick={() => setActiveSection('security')}>Security</li>
+                    <li onClick={() => setActiveSection('location')}>Location</li>
                     <li onClick={() => setActiveSection('notifications')}>Notifications</li>
                 </ul>
                 <button className="logout-button" onClick={handleLogout}>Logout</button>
             </div>
             <div className="profile-card">
-                <h2>Profile Settings</h2>
+                <h2>{activeSection.charAt(0).toUpperCase() + activeSection.slice(1)} Settings</h2>
                 <div className="profile-content">
                     {renderSection()}
                 </div>

@@ -44,10 +44,10 @@ const Navbar = () => {
                 </Link>
                 {user && (
                     <div className="nav-links">
-                        <Link to="/cart" className="cart-link">
+                        <Link to="/cart" className="cart-link" style={{ marginRight: '30px' }}>
                             <span className="material-icons">shopping_cart</span>
                         </Link>
-                        <Link to="/generate-recipe">Generate Recipe</Link>
+                        
                         {profilePhoto ? (
                             <img
                                 src={profilePhoto}

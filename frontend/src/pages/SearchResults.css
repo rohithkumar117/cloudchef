@@ -1,6 +1,7 @@
 .search-results-container {
     text-align: center;
     padding: 20px;
+    position: relative; /* Add this to position the back button */
 }
 
 .recipes-grid {
@@ -26,4 +27,10 @@
 .recipe-item h4 {
     margin-top: 10px;
     font-size: 18px;
+}
+
+.back-button-container {
+    position: absolute;
+    top: 20px;
+    left: 20px;
 }
