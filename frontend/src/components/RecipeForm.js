@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRecipesContext } from "../hooks/useRecipesContext";
+import './RecipeForm.css'; // Import CSS file for styling
 
 const RecipeForm = () => {
     const { dispatch } = useRecipesContext();
+    const navigate = useNavigate();
+
+    // State variables for form fields
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [totalTimeHours, setTotalTimeHours] = useState(0);
@@ -15,11 +19,11 @@ const RecipeForm = () => {
     const [nutritionCarbs, setNutritionCarbs] = useState(0);
     const [steps, setSteps] = useState([{ stepNumber: 1, text: '', ingredients: [], timer: 0 }]);
     const [tags, setTags] = useState([]);
-    const [image, setImage] = useState(null); // Add state for image
+    const [image, setImage] = useState(null); // State for image
     const [error, setError] = useState(null);
     const [showSuccessModal, setShowSuccessModal] = useState(false); // State for success modal
-    const navigate = useNavigate();
 
+    // Handle form submission
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -96,6 +100,11 @@ const RecipeForm = () => {
         setIngredients([...ingredients, { name: '', quantity: '', alternate: [] }]);
     };
 
+    const handleDeleteIngredient = (index) => {
+        const newIngredients = ingredients.filter((_, i) => i !== index);
+        setIngredients(newIngredients);
+    };
+
     const handleStepChange = (index, field, value) => {
         const newSteps = [...steps];
         newSteps[index][field] = value;
@@ -104,6 +113,11 @@ const RecipeForm = () => {
 
     const handleAddStep = () => {
         setSteps([...steps, { stepNumber: steps.length + 1, text: '', ingredients: [], timer: 0 }]);
+    };
+
+    const handleDeleteStep = (index) => {
+        const newSteps = steps.filter((_, i) => i !== index);
+        setSteps(newSteps);
     };
 
     return (
@@ -124,23 +138,27 @@ const RecipeForm = () => {
                     required
                 />
                 <label>Total Time:</label>
-                <input
-                    type="number"
-                    placeholder="Hours"
-                    value={totalTimeHours}
-                    onChange={(e) => setTotalTimeHours(parseInt(e.target.value, 10))}
-                    required
-                />
-                <input
-                    type="number"
-                    placeholder="Minutes"
-                    value={totalTimeMinutes}
-                    onChange={(e) => setTotalTimeMinutes(parseInt(e.target.value, 10))}
-                    required
-                />
-                <label>Ingredients:</label>
+                <div className="total-time-inputs">
+                    <input
+                        type="number"
+                        placeholder="Hours"
+                        value={totalTimeHours}
+                        onChange={(e) => setTotalTimeHours(parseInt(e.target.value, 10))}
+                        required
+                    />
+                    <span>Hours</span>
+                    <input
+                        type="number"
+                        placeholder="Minutes"
+                        value={totalTimeMinutes}
+                        onChange={(e) => setTotalTimeMinutes(parseInt(e.target.value, 10))}
+                        required
+                    />
+                    <span>Minutes</span>
+                </div>
+                <h3>Ingredients:</h3>
                 {ingredients.map((ingredient, index) => (
-                    <div key={index}>
+                    <div key={index} className="ingredient-item">
                         <input
                             type="text"
                             placeholder="Name"
@@ -161,41 +179,48 @@ const RecipeForm = () => {
                             value={ingredient.alternate.join(', ')}
                             onChange={(e) => handleIngredientChange(index, 'alternate', e.target.value.split(', '))}
                         />
+                        <button type="button" onClick={() => handleDeleteIngredient(index)}>Delete</button>
                     </div>
                 ))}
                 <button type="button" onClick={handleAddIngredient}>Add Ingredient</button>
-                <label>Nutrition:</label>
-                <input
-                    type="number"
-                    placeholder="Calories"
-                    value={nutritionCalories}
-                    onChange={(e) => setNutritionCalories(parseInt(e.target.value, 10))}
-                    required
-                />
-                <input
-                    type="number"
-                    placeholder="Fat"
-                    value={nutritionFat}
-                    onChange={(e) => setNutritionFat(parseInt(e.target.value, 10))}
-                    required
-                />
-                <input
-                    type="number"
-                    placeholder="Protein"
-                    value={nutritionProtein}
-                    onChange={(e) => setNutritionProtein(parseInt(e.target.value, 10))}
-                    required
-                />
-                <input
-                    type="number"
-                    placeholder="Carbs"
-                    value={nutritionCarbs}
-                    onChange={(e) => setNutritionCarbs(parseInt(e.target.value, 10))}
-                    required
-                />
-                <label>Steps:</label>
+                <h3>Nutrition:</h3>
+                <div className="nutrition-section">
+                    <label>Calories:</label>
+                    <input
+                        type="number"
+                        placeholder="Calories"
+                        value={nutritionCalories}
+                        onChange={(e) => setNutritionCalories(parseInt(e.target.value, 10))}
+                        required
+                    />
+                    <label>Fat:</label>
+                    <input
+                        type="number"
+                        placeholder="Fat (g)"
+                        value={nutritionFat}
+                        onChange={(e) => setNutritionFat(parseInt(e.target.value, 10))}
+                        required
+                    />
+                    <label>Protein:</label>
+                    <input
+                        type="number"
+                        placeholder="Protein (g)"
+                        value={nutritionProtein}
+                        onChange={(e) => setNutritionProtein(parseInt(e.target.value, 10))}
+                        required
+                    />
+                    <label>Carbs:</label>
+                    <input
+                        type="number"
+                        placeholder="Carbs (g)"
+                        value={nutritionCarbs}
+                        onChange={(e) => setNutritionCarbs(parseInt(e.target.value, 10))}
+                        required
+                    />
+                </div>
+                <h3>Steps:</h3>
                 {steps.map((step, index) => (
-                    <div key={index}>
+                    <div key={index} className="step-item">
                         <textarea
                             placeholder="Step description"
                             value={step.text}
@@ -214,6 +239,7 @@ const RecipeForm = () => {
                             value={step.timer}
                             onChange={(e) => handleStepChange(index, 'timer', parseInt(e.target.value, 10))}
                         />
+                        <button type="button" onClick={() => handleDeleteStep(index)}>Delete</button>
                     </div>
                 ))}
                 <button type="button" onClick={handleAddStep}>Add Step</button>
