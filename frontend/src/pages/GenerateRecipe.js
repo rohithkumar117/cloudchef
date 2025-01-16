@@ -86,7 +86,7 @@ const GenerateRecipe = () => {
                     <p><strong>Total Time:</strong> {generatedRecipe.totalTime}</p>
                     <p><strong>Ingredients:</strong></p>
                     <ul>
-                        {generatedRecipe.ingredientsList.split(',').map((ingredient, index) => (
+                        {generatedRecipe.ingredientsList.map((ingredient, index) => (
                             <li key={index}>{ingredient}</li>
                         ))}
                     </ul>

@@ -9,8 +9,9 @@ const generateRecipe = async (req, res) => {
     const { ingredients, servingSize, cuisine, difficulty, dietaryPreferences } = req.body;
 
     try {
-        const input = `Generate a recipe with the following details:
-Ingredients: ${ingredients.join(', ')}
+        const input = `Generate a detailed recipe with the following details:
+Ingredients (include quantities):
+${ingredients.join(', ')}
 Serving Size: ${servingSize}
 Cuisine: ${cuisine}
 Difficulty: ${difficulty}
@@ -34,30 +35,32 @@ Instructions:`;
             return res.status(500).json({ error: 'Failed to generate recipe text' });
         }
 
-        const recipeNameMatch = recipeText.match(/Enjoy your (.*)!/);
-        const ingredientsListMatch = recipeText.match(/Ingredients: ([\s\S]*?)\n\n/);
-        const stepsTextMatch = recipeText.match(/Instructions:\n\n([\s\S]*)/);
+        // Adjust regex patterns to match the generated text structure
+        const recipeNameMatch = recipeText.match(/(?:Enjoy your |Enjoy this )?(.*)!/);
+        const ingredientsListMatch = recipeText.match(/Ingredients:\n([\s\S]*?)\n\nInstructions:/);
+        const stepsTextMatch = recipeText.match(/Instructions:\n([\s\S]*?)(?:\n\n|$)/);
+
+        
 
         if (!recipeNameMatch || !ingredientsListMatch || !stepsTextMatch) {
             return res.status(500).json({ error: 'Failed to parse generated recipe text' });
         }
 
         const recipeName = recipeNameMatch[1].trim();
-        const ingredientsList = ingredientsListMatch[1].trim();
+        const ingredientsList = ingredientsListMatch[1].trim().split('\n').map(item => item.trim());
         const stepsText = stepsTextMatch[1].trim();
 
-        // Further clean up the steps to remove repeated instructions
+        // Clean and format steps
         const steps = stepsText.split('\n').map((step, index) => ({
             stepNumber: index + 1,
             text: step.trim(),
-            timer: 5 // Placeholder timer
-        })).filter(step => step.text !== '');
+            timer: 5 // Default timer (can be customized)
+        })).filter(step => step.text);
 
+        // Construct the final recipe object
         const formattedRecipe = {
             recipeName,
-            totalTime: 'N/A', // Placeholder total time
             ingredientsList,
-            nutrition: 'N/A', // Placeholder nutrition
             steps
         };
 
